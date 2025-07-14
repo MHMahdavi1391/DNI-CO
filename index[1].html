@@ -1,0 +1,80 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>سایت من</title>
+  <style>
+    body { background: #fffde7; font-family: Tahoma; text-align: center; margin: 0; }
+    header {
+      background: #212121;
+      padding: 15px;
+      color: #fdd835;
+      font-size: 24px;
+    }
+    h1 { color: #fbc02d; margin-top: 20px; }
+    .slideshow {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .slideshow img {
+      width: 250px;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin: 0 10px;
+      display: none;
+    }
+    .btn-download {
+      padding: 10px 20px;
+      background: #fdd835;
+      border: none;
+      font-size: 18px;
+      margin: 30px auto;
+      cursor: pointer;
+    }
+    #messageBox {
+      width: 80%;
+      margin: 20px auto;
+      background: #fff9c4;
+      padding: 15px;
+      border-radius: 10px;
+      color: #444;
+      font-size: 18px;
+      box-shadow: 0 0 5px #ccc;
+    }
+  </style>
+</head>
+<body>
+  <header>DNI CO.</header>
+  <h1>به سایت دی‌تک نمای ایران خوش آمدید</h1>
+
+  <div class="slideshow">
+    <img src="img1.jpg" style="display:block">
+    <img src="img2.jpg">
+    <img src="img3.jpg">
+  </div>
+
+  <div id="messageBox"></div>
+
+  <a href="download.html"><button class="btn-download">📂 ورود به بخش دانلود فایل‌ها</button></a>
+
+  <script>
+    let slideIndex = 0;
+    const slides = document.querySelectorAll(".slideshow img");
+    setInterval(() => {
+      slides[slideIndex].style.display = "none";
+      slideIndex = (slideIndex + 1) % slides.length;
+      slides[slideIndex].style.display = "block";
+    }, 5000);
+
+    // Load message from external file (message.txt)
+    fetch('message.txt')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('messageBox').innerText = data;
+      });
+  </script>
+</body>
+</html>
