@@ -13,13 +13,12 @@
 
     h1 {
       color: #f9a825;
-      margin: 20px 0;
+      margin: 10px 0;
     }
 
     .back-button {
       display: inline-block;
       margin-top: 20px;
-      margin-bottom: 10px;
       padding: 10px 20px;
       background-color: #4caf50;
       color: white;
@@ -58,43 +57,107 @@
       font-weight: bold;
       text-decoration: none;
     }
+
+    .preview-img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      filter: blur(8px);
+      transition: 0.3s;
+    }
+
+    .preview-img.clear {
+      filter: none;
+    }
+
+    #searchBox {
+      margin-top: 20px;
+    }
+
+    #searchBox input {
+      width: 200px;
+      margin: 5px;
+    }
+
+    #adminMsg {
+      margin-top: 10px;
+      color: green;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
   <a href="index.html" class="back-button">🏠 بازگشت به صفحه اصلی</a>
   <h1>📁 فایل‌های قابل دانلود</h1>
+
+  <div id="searchBox">
+    <input type="text" id="searchInput" placeholder="جستجوی نام فایل">
+    <button onclick="loadFiles()">🔄 تازه‌سازی</button>
+  </div>
+
+  <div id="adminMsg"></div>
   <div id="files"></div>
 
   <script>
     const MASTER_PASSWORD = "MhM13910310";
 
-    fetch('files.json')
-      .then(res => res.json())
-      .then(files => {
-        const container = document.getElementById('files');
-        files.forEach((file, index) => {
-          const div = document.createElement('div');
-          div.className = 'file';
-          div.innerHTML = `
-            <h3>${file.name}</h3>
-            <input type="password" placeholder="رمز را وارد کنید" id="pass${index}" />
-            <br>
-            <a class="download-link" id="link${index}" href="${file.filename}" style="display:none" download>⬇️ دانلود فایل</a>
-            <button onclick="checkPass(${index}, '${file.password}', '${file.filename}')">بررسی رمز</button>
-          `;
-          container.appendChild(div);
-        });
-      });
+    function isImage(fileName) {
+      return /\.(jpg|jpeg|png|gif|webp)$/i.test(fileName);
+    }
 
-    function checkPass(index, filePass, filename) {
-      const input = document.getElementById(`pass${index}`).value.trim();
-      const link = document.getElementById(`link${index}`);
+    function loadFiles() {
+      fetch('files.json')
+        .then(res => res.json())
+        .then(files => {
+          const search = document.getElementById('searchInput').value.trim();
+          const container = document.getElementById('files');
+          container.innerHTML = '';
+
+          files
+            .filter(f => f.name.includes(search))
+            .forEach((file, index) => {
+              const div = document.createElement('div');
+              div.className = 'file';
+
+              let content = <h3>${file.name}</h3>
+                             <p>💰 قیمت: ${file.price} تومان</p>;
+
+              if (isImage(file.filename)) {
+                content += <img src="${file.filename}" class="preview-img" id="img${index}"><br>;
+              }
+
+              content += 
+                <input type="password" placeholder="رمز را وارد کنید" id="pass${index}" />
+                <br>
+                <a class="download-link" id="link${index}" href="${file.filename}" style="display:none" download>⬇️ دانلود فایل</a>
+                <button onclick="checkPass(${index}, '${file.password}')">بررسی رمز</button>
+              ;
+
+              div.innerHTML = content;
+              container.appendChild(div);
+            });
+        });
+    }
+
+    function checkPass(index, filePass) {
+      const input = document.getElementById(pass${index}).value.trim();
+      const link = document.getElementById(link${index});
+      const img = document.getElementById(img${index});
+      
       if (input === filePass || input === MASTER_PASSWORD) {
         link.style.display = 'inline-block';
+        if (img) img.classList.add('clear');
+        if (input === MASTER_PASSWORD) {
+          document.getElementById("adminMsg").innerText = "👑 خوش آمدید مدیر سایت!";
+        }
       } else {
         alert("❌ رمز اشتباه است!");
       }
     }
+
+    window.onload = loadFiles;
   </script>
 </body>
 </html>
