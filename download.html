@@ -16,15 +16,20 @@
       margin: 10px 0;
     }
 
-    .back-button {
-      display: inline-block;
+    .top-buttons {
       margin-top: 20px;
+    }
+
+    .back-button, .admin-button {
+      display: inline-block;
+      margin: 0 10px;
       padding: 10px 20px;
       background-color: #4caf50;
       color: white;
       text-decoration: none;
       font-size: 16px;
       border-radius: 6px;
+      cursor: pointer;
     }
 
     .file {
@@ -64,7 +69,7 @@
       object-fit: cover;
       border-radius: 8px;
       margin-bottom: 10px;
-      filter: blur(10px);
+      filter: blur(3px) brightness(0.7);
       transition: 0.3s;
     }
 
@@ -86,10 +91,24 @@
       color: green;
       font-weight: bold;
     }
+
+    #adminList {
+      display: none;
+      margin: 20px auto;
+      width: 90%;
+      background: #fffde7;
+      border: 1px solid #999;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: right;
+    }
   </style>
 </head>
 <body>
-  <a href="index.html" class="back-button">🏠 بازگشت به صفحه اصلی</a>
+  <div class="top-buttons">
+    <a href="index.html" class="back-button">🏠 بازگشت به صفحه اصلی</a>
+    <button class="admin-button" onclick="showAdminPrompt()">🔐 ورود مدیر</button>
+  </div>
   <h1>📁 فایل‌های قابل دانلود</h1>
 
   <div id="searchBox">
@@ -100,8 +119,11 @@
   <div id="adminMsg"></div>
   <div id="files"></div>
 
+  <div id="adminList"></div>
+
   <script>
     const MASTER_PASSWORD = "MhM13910310";
+    let fileData = [];
 
     function isImage(fileName) {
       return /\.(jpg|jpeg|png|gif|webp)$/i.test(fileName);
@@ -109,41 +131,34 @@
 
     function loadFiles() {
       fetch('files.json')
-        .then(res => {
-          if (!res.ok) throw new Error('فایل JSON پیدا نشد!');
-          return res.json();
-        })
+        .then(res => res.json())
         .then(files => {
+          fileData = files;
           const search = document.getElementById('searchInput').value.trim();
           const container = document.getElementById('files');
           container.innerHTML = '';
 
-          files
-            .filter(f => f.name.includes(search))
-            .forEach((file, index) => {
-              const div = document.createElement('div');
-              div.className = 'file';
+          files.filter(f => f.name.includes(search)).forEach((file, index) => {
+            const div = document.createElement('div');
+            div.className = 'file';
 
-              let content = `<h3>${file.name}</h3>
-                             <p>💰 قیمت: ${file.price} تومان</p>`;
+            let content = `<h3>${file.name}</h3>
+                           <p>💰 قیمت: ${file.price} تومان</p>`;
 
-              if (isImage(file.filename)) {
-                content += `<img src="${file.filename}" class="preview-img" id="img${index}"><br>`;
-              }
+            if (isImage(file.filename)) {
+              content += `<img src="${file.filename}" class="preview-img" id="img${index}"><br>`;
+            }
 
-              content += `
-                <input type="password" placeholder="رمز را وارد کنید" id="pass${index}" />
-                <br>
-                <a class="download-link" id="link${index}" href="${file.filename}" style="display:none" download>⬇️ دانلود فایل</a>
-                <button onclick="checkPass(${index}, '${file.password}')">بررسی رمز</button>
-              `;
+            content += `
+              <input type="password" placeholder="رمز را وارد کنید" id="pass${index}" />
+              <br>
+              <a class="download-link" id="link${index}" href="${file.filename}" style="display:none" download>⬇️ دانلود فایل</a>
+              <button onclick="checkPass(${index}, '${file.password}')">بررسی رمز</button>
+            `;
 
-              div.innerHTML = content;
-              container.appendChild(div);
-            });
-        })
-        .catch(err => {
-          document.getElementById('files').innerText = '⚠️ خطا در بارگذاری فایل‌ها: ' + err.message;
+            div.innerHTML = content;
+            container.appendChild(div);
+          });
         });
     }
 
@@ -161,6 +176,24 @@
       } else {
         alert("❌ رمز اشتباه است!");
       }
+    }
+
+    function showAdminPrompt() {
+      const pass = prompt("رمز مستر را وارد کنید:");
+      if (pass === MASTER_PASSWORD) {
+        showAdminList();
+      } else {
+        alert("دسترسی غیرمجاز");
+      }
+    }
+
+    function showAdminList() {
+      const adminBox = document.getElementById('adminList');
+      adminBox.innerHTML = '<h3>📋 لیست فایل‌ها برای مدیر</h3>';
+      fileData.forEach(f => {
+        adminBox.innerHTML += `<p><strong>نام:</strong> ${f.name} | 💰 ${f.price} تومان | 🔑 ${f.password}</p>`;
+      });
+      adminBox.style.display = 'block';
     }
 
     window.onload = loadFiles;
