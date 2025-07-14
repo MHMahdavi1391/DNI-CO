@@ -59,12 +59,12 @@
     }
 
     .preview-img {
-      width: 120px;
-      height: 120px;
+      width: 150px;
+      height: 150px;
       object-fit: cover;
       border-radius: 8px;
       margin-bottom: 10px;
-      filter: blur(8px);
+      filter: blur(10px);
       transition: 0.3s;
     }
 
@@ -109,7 +109,10 @@
 
     function loadFiles() {
       fetch('files.json')
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) throw new Error('فایل JSON پیدا نشد!');
+          return res.json();
+        })
         .then(files => {
           const search = document.getElementById('searchInput').value.trim();
           const container = document.getElementById('files');
@@ -121,31 +124,34 @@
               const div = document.createElement('div');
               div.className = 'file';
 
-              let content = <h3>${file.name}</h3>
-                             <p>💰 قیمت: ${file.price} تومان</p>;
+              let content = `<h3>${file.name}</h3>
+                             <p>💰 قیمت: ${file.price} تومان</p>`;
 
               if (isImage(file.filename)) {
-                content += <img src="${file.filename}" class="preview-img" id="img${index}"><br>;
+                content += `<img src="${file.filename}" class="preview-img" id="img${index}"><br>`;
               }
 
-              content += 
+              content += `
                 <input type="password" placeholder="رمز را وارد کنید" id="pass${index}" />
                 <br>
                 <a class="download-link" id="link${index}" href="${file.filename}" style="display:none" download>⬇️ دانلود فایل</a>
                 <button onclick="checkPass(${index}, '${file.password}')">بررسی رمز</button>
-              ;
+              `;
 
               div.innerHTML = content;
               container.appendChild(div);
             });
+        })
+        .catch(err => {
+          document.getElementById('files').innerText = '⚠️ خطا در بارگذاری فایل‌ها: ' + err.message;
         });
     }
 
     function checkPass(index, filePass) {
-      const input = document.getElementById(pass${index}).value.trim();
-      const link = document.getElementById(link${index});
-      const img = document.getElementById(img${index});
-      
+      const input = document.getElementById(`pass${index}`).value.trim();
+      const link = document.getElementById(`link${index}`);
+      const img = document.getElementById(`img${index}`);
+
       if (input === filePass || input === MASTER_PASSWORD) {
         link.style.display = 'inline-block';
         if (img) img.classList.add('clear');
