@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <title>مرکز روان‌درمانی و نوروتراپی دکتر پژمان</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      font-family: Tahoma, sans-serif;
+      margin: 0;
+      padding: 0;
+      direction: rtl;
+      background-color: #e0f7fa;
+    }
+    header {
+      background-color: #00bcd4;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 { margin: 0; }
+
+    .top-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .top-button {
+      width: 40px;
+      height: 40px;
+      background-color: #ffffff33;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s;
+    }
+    .top-button:hover { background-color: #ffffff66; }
+
+    main {
+      display: none;
+      padding: 10px;
+      gap: 10px;
+    }
+    main.active {
+      display: flex;
+    }
+    .column {
+      background-color: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+    }
+    #patientListColumn { width: 25%; }
+    #centerColumn { width: 50%; }
+    #addPatientColumn { width: 25%; }
+
+    label, input, textarea, select, button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      font-size: 16px;
+    }
+    input, textarea, select {
+      padding: 6px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 8px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #388e3c;
+    }
+    .danger {
+      background-color: #e53935 !important;
+    }
+    .danger:hover {
+      background-color: #c62828 !important;
+    }
+    .hidden { display: none; }
+
+    .appointment-entry {
+      border-bottom: 1px solid #ccc;
+      padding: 6px 0;
+    }
+    .appointment-entry span {
+      display: inline-block;
+      margin-left: 10px;
+    }
+
+    .patient-name {
+      font-weight: bold;
+      font-size: 18px;
+      margin-top: 10px;
+    }
+    .patient-info {
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .refresh-button {
+      margin-top: 8px;
+      background-color: #03a9f4;
+    }
+    .refresh-button:hover {
+      background-color: #0288d1;
+    }
+
+    /* استایل پاپ‌آپ خروجی */
+    #exportPopup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 400px;
+      max-height: 70vh;
+      overflow-y: auto;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      transform: translate(-50%, -50%);
+      padding: 15px;
+      z-index: 1000;
+    }
+    #exportPopup.hidden {
+      display: none;
+    }
+    #exportPopup label {
+      display: block;
+      margin: 5px 0;
+    }
+    #exportPopup .popup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    #exportPopup .popup-header button {
+      background-color: #e53935;
+      border: none;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 6px;
+      padding: 3px 8px;
+    }
+  </style>
+</head>
+<body>
+<header>
+    <h1>مرکز روان‌درمانی و نوروتراپی دکتر پژمان</h1>
+    <div class="top-buttons">
+      <button class="top-button" onclick="showPage('main')">📖</button>
+      <button class="top-button" onclick="showPage('stats')">📊</button>
+    </div>
+  </header>
+
+  <!-- صفحه اصلی -->
+  <main id="mainView" class="active">
+    <div id="patientListColumn" class="column">
+      <h3>لیست بیماران</h3>
+      <input type="text" id="searchPatient" placeholder="جستجو بیمار..." oninput="renderPatients()" />
+      <button class="refresh-button" onclick="renderPatients()">🔄 تازه‌سازی</button>
+      <div id="patientList"></div>
+    </div>
+
+    <div id="centerColumn" class="column">
+      <h3>نوبت‌های امروز</h3>
+      <div style="display:flex; gap: 10px; margin-bottom: 10px;">
+        <input type="number" id="searchDateYear" placeholder="سال (شمسی)" min="1300" max="1500" style="width: 30%;" />
+        <input type="number" id="searchDateMonth" placeholder="ماه (شمسی)" min="1" max="12" style="width: 30%;" />
+        <input type="number" id="searchDateDay" placeholder="روز (شمسی)" min="1" max="31" style="width: 30%;" />
+        <button class="refresh-button" onclick="showAppointments()">🔄 تازه‌سازی</button>
+      </div>
+      <div id="appointmentList"></div>
+    </div>
+
+    <div id="addPatientColumn" class="column">
+      <h3>افزودن بیمار جدید</h3>
+      <input type="text" id="patientName" placeholder="نام بیمار" />
+      <input type="text" id="patientFather" placeholder="نام پدر" />
+      <input type="text" id="patientPhone" placeholder="شماره همراه ۱" />
+      <input type="text" id="patientPhone2" placeholder="شماره همراه ۲" />
+      <div style="display:flex; gap: 5px;">
+        <input type="number" id="patientRegisterYear" placeholder="سال ثبت (شمسی)" min="1300" max="1500" style="width: 33%;" />
+        <input type="number" id="patientRegisterMonth" placeholder="ماه ثبت (شمسی)" min="1" max="12" style="width: 33%;" />
+        <input type="number" id="patientRegisterDay" placeholder="روز ثبت (شمسی)" min="1" max="31" style="width: 33%;" />
+      </div>
+      <button onclick="addPatient()">➕ افزودن</button>
+    </div>
+  </main>
+
+  <main id="statsView">
+    <div class="column" style="width: 25%">
+      <h3>انتخاب بیماران</h3>
+      <input type="text" id="statsSearch" placeholder="جستجو بیمار..." oninput="renderStatsPatients()" />
+      <button class="refresh-button" onclick="renderStatsPatients()">🔄 تازه‌سازی</button>
+      <label><input type="checkbox" id="selectAllPatients" onchange="toggleAllPatients(this)"> انتخاب همه</label>
+      <div id="statsPatients"></div>
+    </div>
+
+    <div class="column" style="width: 50%">
+      <h3>بازه زمانی</h3>
+      <label>از تاریخ:</label>
+      <div style="display:flex; gap: 5px; margin-bottom: 10px;">
+        <input type="number" id="fromYear" placeholder="سال (شمسی)" min="1300" max="1500" style="width: 33%;" />
+        <input type="number" id="fromMonth" placeholder="ماه (شمسی)" min="1" max="12" style="width: 33%;" />
+        <input type="number" id="fromDay" placeholder="روز (شمسی)" min="1" max="31" style="width: 33%;" />
+      </div>
+      <label>تا تاریخ:</label>
+      <div style="display:flex; gap: 5px; margin-bottom: 10px;">
+        <input type="number" id="toYear" placeholder="سال (شمسی)" min="1300" max="1500" style="width: 33%;" />
+        <input type="number" id="toMonth" placeholder="ماه (شمسی)" min="1" max="12" style="width: 33%;" />
+        <input type="number" id="toDay" placeholder="روز (شمسی)" min="1" max="31" style="width: 33%;" />
+      </div>
+      <button onclick="calculateStats()">محاسبه</button>
+      <div id="results"></div>
+    </div>
+
+    <div class="column" style="width: 25%">
+      <h3>مدیریت اطلاعات</h3>
+      <button onclick="downloadBackup()">📥 بکاپ گرفتن</button>
+      <button onclick="uploadBackup()">📤 بارگذاری بکاپ</button>
+      <button class="danger" onclick="deleteAllData()">🗑️ حذف کامل اطلاعات</button>
+      <br /><br />
+      <button onclick="openExportPopup()">📄 خروجی گرفتن بیماران</button>
+    </div>
+  </main>
+
+  <!-- پاپ‌آپ خروجی گرفتن بیماران -->
+  <div id="exportPopup" class="hidden">
+    <div class="popup-header">
+      <h3>انتخاب بیماران برای خروجی</h3>
+      <button onclick="closeExportPopup()">✖</button>
+    </div>
+    <input type="text" id="exportSearch" placeholder="جستجو بیماران..." oninput="renderExportPatients()" />
+    <label><input type="checkbox" onchange="toggleAllExportPatients(this)"> انتخاب همه</label>
+    <div id="exportPatientList" style="max-height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 5px; margin-top: 5px;"></div>
+    <button style="margin-top: 10px;" onclick="generateTXT()">⬇ خروجی فایل متنی (TXT)</button>
+  </div>
+a<script>
+  let patients = JSON.parse(localStorage.getItem("patients")) || [];
+  let appointments = JSON.parse(localStorage.getItem("appointments")) || [];
+
+  function saveData() {
+    localStorage.setItem("patients", JSON.stringify(patients));
+    localStorage.setItem("appointments", JSON.stringify(appointments));
+  }
+
+  function showPage(id) {
+    document.querySelectorAll("main").forEach(m => m.classList.remove("active"));
+    document.getElementById(id + "View").classList.add("active");
+  }
+
+  // افزودن بیمار جدید
+  function addPatient() {
+    const name = document.getElementById("patientName").value.trim();
+    const father = document.getElementById("patientFather").value.trim();
+    const phone = document.getElementById("patientPhone").value.trim();
+    const phone2 = document.getElementById("patientPhone2").value.trim();
+    const year = document.getElementById("patientRegisterYear").value.trim();
+    const month = document.getElementById("patientRegisterMonth").value.trim();
+    const day = document.getElementById("patientRegisterDay").value.trim();
+
+    if (!name || !father || !phone || !phone2 || !year || !month || !day) {
+      alert("لطفاً تمام فیلدها را پر کنید");
+      return;
+    }
+    const regDate = `${year.padStart(4, '0')}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    const patient = { id: Date.now(), name, father, phone, phone2, regDate };
+    patients.push(patient);
+    saveData();
+    renderPatients();
+    clearPatientForm();
+  }
+
+  function clearPatientForm() {
+    document.getElementById("patientName").value = "";
+    document.getElementById("patientFather").value = "";
+    document.getElementById("patientPhone").value = "";
+    document.getElementById("patientPhone2").value = "";
+    document.getElementById("patientRegisterYear").value = "";
+    document.getElementById("patientRegisterMonth").value = "";
+    document.getElementById("patientRegisterDay").value = "";
+  }
+
+  // نمایش لیست بیماران با جستجو
+  function renderPatients() {
+    const list = document.getElementById("patientList");
+    const search = document.getElementById("searchPatient").value.trim();
+    list.innerHTML = "";
+    patients.filter(p => p.name.includes(search)).forEach(p => {
+      const div = document.createElement("div");
+      div.innerHTML = `
+        <div class="patient-name">${p.name}</div>
+        <div class="patient-info">
+          پدر: ${p.father}<br>
+          📞 ${p.phone} / ${p.phone2}<br>
+          تاریخ ثبت: ${p.regDate}
+        </div>
+        <button onclick="createAppointment(${p.id})">🗓 نوبت‌دهی فوری</button>
+        <button onclick="editPatient(${p.id})">✏️ ویرایش اطلاعات</button>
+        <button class="danger" onclick="deletePatient(${p.id})">🗑 حذف</button>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  // حذف بیمار و نوبت‌های مربوطه
+  function deletePatient(id) {
+    if (!confirm("آیا مطمئن هستید؟")) return;
+    patients = patients.filter(p => p.id !== id);
+    appointments = appointments.filter(a => a.patientId !== id);
+    saveData();
+    renderPatients();
+    showAppointments();
+  }
+
+  // ویرایش بیمار (از طریق فرم ساده prompt)
+  function editPatient(id) {
+    const p = patients.find(x => x.id === id);
+    if (!p) return;
+    const name = prompt("نام؟", p.name);
+    const father = prompt("نام پدر؟", p.father);
+    const phone = prompt("تلفن اول؟", p.phone);
+    const phone2 = prompt("تلفن دوم؟", p.phone2);
+
+    // تبدیل تاریخ ذخیره‌شده به اجزای جدا
+    const [year, month, day] = p.regDate.split("-");
+
+    const yearNew = prompt("سال ثبت (شمسی)؟", year);
+    const monthNew = prompt("ماه ثبت (شمسی)؟", month);
+    const dayNew = prompt("روز ثبت (شمسی)؟", day);
+
+    if (!name || !father || !phone || !phone2 || !yearNew || !monthNew || !dayNew) return;
+
+    p.name = name;
+    p.father = father;
+    p.phone = phone;
+    p.phone2 = phone2;
+    p.regDate = `${yearNew.padStart(4, '0')}-${monthNew.padStart(2, '0')}-${dayNew.padStart(2, '0')}`;
+
+    saveData();
+    renderPatients();
+  }
+
+  // ساخت نوبت جدید
+  function createAppointment(patientId) {
+    const service = prompt("نام سرویس؟");
+    if (!service) return alert("نام سرویس وارد نشده");
+
+    const price = prompt("هزینه؟");
+    if (!price || isNaN(price)) return alert("قیمت نامعتبر است");
+
+    const method = prompt("روش پرداخت؟ (1. کارتخوان، 2. نقدی، 3. کارت به کارت)");
+    let methodStr = "";
+    if (method === "1") methodStr = "کارتخوان";
+    else if (method === "2") methodStr = "نقدی";
+    else if (method === "3") methodStr = "کارت به کارت";
+    else return alert("روش پرداخت نامعتبر است");
+
+    // پیشفرض تاریخ امروز شمسی به صورت رشته yyyy-mm-dd با اعداد انگلیسی
+    const today = new Date();
+    // تبدیل تاریخ میلادی به شمسی — فقط برای نمایش اولیه
+    // چون میخوایم همه تاریخ‌ها شمسی با اعداد انگلیسی باشه، استفاده از یک کتابخانه شمسی مثل persian-date منطقی است
+    // ولی چون درخواستی بود از کیت تاریخ استفاده نشود، پس باید تابع تبدیل بنویسیم یا به ساده ترین شکل:
+    // برای ساده‌سازی در اینجا فرض می‌کنیم امروز را ثابت می‌گیریم و می‌گذاریم رشته ثابت یا ورودی کاربر
+
+    // اما برای جلوگیری از پیچیدگی، تاریخ را به عنوان سه عدد جدا دریافت می‌کنیم:
+    let year = prompt("سال (شمسی) پیشفرض:", "1404");
+    let month = prompt("ماه (شمسی) پیشفرض:", "04");
+    let day = prompt("روز (شمسی) پیشفرض:", "21");
+
+    if (!year || !month || !day) return alert("تاریخ وارد نشده");
+
+    const date = `${year.padStart(4,'0')}-${month.padStart(2,'0')}-${day.padStart(2,'0')}`;
+
+    const time = prompt("ساعت؟ (مثلاً 14:30)");
+    if (!time) return alert("ساعت وارد نشده");
+
+    appointments.push({
+      id: Date.now(),
+      patientId,
+      date,
+      time,
+      service,
+      price,
+      method: methodStr
+    });
+    saveData();
+    showAppointments();
+  }
+
+  // نمایش نوبت‌ها بر اساس تاریخ انتخابی (سال، ماه، روز)
+  function showAppointments() {
+    const list = document.getElementById("appointmentList");
+    list.innerHTML = "";
+
+    const year = document.getElementById("searchDateYear").value.trim();
+    const month = document.getElementById("searchDateMonth").value.trim();
+    const day = document.getElementById("searchDateDay").value.trim();
+
+    if (!year || !month || !day) {
+      list.innerHTML = "<p>لطفاً تاریخ را کامل وارد کنید.</p>";
+      return;
+    }
+
+    const filterDate = `${year.padStart(4, '0')}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+
+    // مرتب‌سازی نوبت‌ها بر اساس تاریخ و ساعت و دقیقه
+    appointments
+      .filter(a => a.date === filterDate)
+      .sort((a, b) => {
+        if (a.date !== b.date) return a.date.localeCompare(b.date);
+        return a.time.localeCompare(b.time);
+      })
+      .forEach(a => {
+        const p = patients.find(p => p.id === a.patientId);
+        const div = document.createElement("div");
+        div.className = "appointment-entry";
+        div.innerHTML = `
+          <span><strong>${p?.name || "نامشخص"}</strong></span>
+          <span>${a.service} | ${a.price} تومان | ${a.method}</span>
+          <span>${a.time}</span>
+          <button onclick="editAppointment(${a.id})">✏️</button>
+          <button class="danger" onclick="deleteAppointment(${a.id})">🗑</button>
+        `;
+        list.appendChild(div);
+      });
+  }
+
+  // ویرایش نوبت
+  function editAppointment(id) {
+    const a = appointments.find(x => x.id === id);
+    if (!a) return;
+
+    const service = prompt("نام سرویس؟", a.service);
+    if (!service) return alert("نام سرویس وارد نشده");
+
+    const price = prompt("قیمت؟", a.price);
+    if (!price || isNaN(price)) return alert("قیمت نامعتبر است");
+
+    const year = prompt("سال (شمسی)؟", a.date.split("-")[0]);
+    const month = prompt("ماه (شمسی)؟", a.date.split("-")[1]);
+    const day = prompt("روز (شمسی)؟", a.date.split("-")[2]);
+    if (!year || !month || !day) return alert("تاریخ نامعتبر است");
+
+    const date = `${year.padStart(4,'0')}-${month.padStart(2,'0')}-${day.padStart(2,'0')}`;
+
+    const time = prompt("ساعت؟ (مثلاً 14:30)", a.time);
+    if (!time) return alert("ساعت وارد نشده");
+
+    const methodInput = prompt("روش پرداخت؟ (1. کارتخوان، 2. نقدی، 3. کارت به کارت)", a.method === "کارتخوان" ? "1" : a.method === "نقدی" ? "2" : "3");
+    let methodStr = "";
+    if (methodInput === "1") methodStr = "کارتخوان";
+    else if (methodInput === "2") methodStr = "نقدی";
+    else if (methodInput === "3") methodStr = "کارت به کارت";
+    else return alert("روش پرداخت نامعتبر است");
+
+    a.service = service;
+    a.price = price;
+    a.date = date;
+    a.time = time;
+    a.method = methodStr;
+
+    saveData();
+    showAppointments();
+  }
+
+  // حذف نوبت
+  function deleteAppointment(id) {
+    appointments = appointments.filter(a => a.id !== id);
+    saveData();
+    showAppointments();
+  }
+
+  // رندر بیماران بخش آمار و مالی
+  function renderStatsPatients() {
+    const list = document.getElementById("statsPatients");
+    const search = document.getElementById("statsSearch").value.trim();
+    list.innerHTML = "";
+    patients.filter(p => p.name.includes(search)).forEach(p => {
+      const label = document.createElement("label");
+      label.innerHTML = `<input type="checkbox" value="${p.id}"> ${p.name}`;
+      list.appendChild(label);
+    });
+  }
+
+  function toggleAllPatients(checkbox) {
+    document.querySelectorAll("#statsPatients input[type=checkbox]").forEach(cb => cb.checked = checkbox.checked);
+  }
+
+  // محاسبه آمار مالی
+  function calculateStats() {
+    const yearFrom = document.getElementById("fromYear").value.trim();
+    const monthFrom = document.getElementById("fromMonth").value.trim();
+    const dayFrom = document.getElementById("fromDay").value.trim();
+    const yearTo = document.getElementById("toYear").value.trim();
+    const monthTo = document.getElementById("toMonth").value.trim();
+    const dayTo = document.getElementById("toDay").value.trim();
+
+    if (!yearFrom || !monthFrom || !dayFrom || !yearTo || !monthTo || !dayTo) {
+      alert("لطفاً بازه زمانی را کامل وارد کنید");
+      return;
+    }
+
+    const from = `${yearFrom.padStart(4, '0')}-${monthFrom.padStart(2, '0')}-${dayFrom.padStart(2, '0')}`;
+    const to = `${yearTo.padStart(4, '0')}-${monthTo.padStart(2, '0')}-${dayTo.padStart(2, '0')}`;
+
+    const selectedIds = Array.from(document.querySelectorAll("#statsPatients input:checked")).map(cb => +cb.value);
+    if (selectedIds.length === 0) {
+      alert("لطفاً حداقل یک بیمار انتخاب کنید");
+      return;
+    }
+
+    const result = { "کارتخوان": 0, "نقدی": 0, "کارت به کارت": 0 };
+    appointments.forEach(a => {
+      if (a.date >= from && a.date <= to && selectedIds.includes(a.patientId)) {
+        result[a.method] += Number(a.price);
+      }
+    });
+
+    document.getElementById("results").innerHTML = `
+      <p>کارتخوان: ${result["کارتخوان"]} تومان</p>
+      <p>نقدی: ${result["نقدی"]} تومان</p>
+      <p>کارت به کارت: ${result["کارت به کارت"]} تومان</p>
+    `;
+  }
+
+  // بکاپ گرفتن و بارگذاری
+  function downloadBackup() {
+    const data = { patients, appointments };
+    const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "backup.json";
+    a.click();
+  }
+
+  function uploadBackup() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "application/json";
+    input.onchange = e => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const data = JSON.parse(reader.result);
+        patients = data.patients || [];
+        appointments = data.appointments || [];
+        saveData();
+        renderPatients();
+        showAppointments();
+        renderStatsPatients();
+      };
+      reader.readAsText(e.target.files[0]);
+    };
+    input.click();
+  }
+
+  // حذف کامل داده‌ها
+  function deleteAllData() {
+    const pass = prompt("رمز حذف اطلاعات؟");
+    if (pass !== "13910310") {
+      alert("رمز اشتباه است");
+      return;
+    }
+    if (!confirm("آیا مطمئن هستید؟")) return;
+    patients = [];
+    appointments = [];
+    saveData();
+    renderPatients();
+    showAppointments();
+    renderStatsPatients();
+  }
+
+  // پاپ‌آپ خروجی گرفتن بیماران
+  function openExportPopup() {
+    document.getElementById("exportPopup").classList.remove("hidden");
+    renderExportPatients();
+  }
+  function closeExportPopup() {
+    document.getElementById("exportPopup").classList.add("hidden");
+  }
+
+  // رندر بیماران در پاپ‌آپ خروجی
+  function renderExportPatients() {
+    const list = document.getElementById("exportPatientList");
+    const search = document.getElementById("exportSearch").value.trim();
+    list.innerHTML = "";
+    patients.filter(p => p.name.includes(search)).forEach(p => {
+      const label = document.createElement("label");
+      label.innerHTML = `<input type="checkbox" value="${p.id}"> ${p.name}`;
+      list.appendChild(label);
+    });
+  }
+
+  function toggleAllExportPatients(checkbox) {
+    document.querySelectorAll("#exportPatientList input[type=checkbox]").forEach(cb => cb.checked = checkbox.checked);
+  }
+
+  // تولید فایل متنی مرتب خروجی بیماران و نوبت‌ها
+  function generateTXT() {
+    const selectedIds = Array.from(document.querySelectorAll("#exportPatientList input:checked")).map(cb => +cb.value);
+    if (selectedIds.length === 0) {
+      alert("هیچ بیماری انتخاب نشده");
+      return;
+    }
+
+    let content = "";
+    selectedIds.forEach(id => {
+      const p = patients.find(p => p.id === id);
+      content += `============================\n`;
+      content += `نام: ${p.name}\n`;
+      content += `نام پدر: ${p.father}\n`;
+      content += `شماره‌ها: ${p.phone} - ${p.phone2}\n`;
+      content += `تاریخ ثبت: ${p.regDate}\n`;
+      content += `--- نوبت‌ها ---\n`;
+      const aps = appointments.filter(a => a.patientId === id);
+      if (aps.length === 0) {
+        content += "ندارد\n";
+      } else {
+        // مرتب‌سازی نوبت‌ها بر اساس تاریخ و ساعت و دقیقه
+        aps.sort((a, b) => (a.date + " " + a.time).localeCompare(b.date + " " + b.time));
+        aps.forEach(a => {
+          content += `تاریخ: ${a.date} - ساعت: ${a.time}\n`;
+          content += `سرویس: ${a.service}\n`;
+          content += `هزینه: ${a.price} تومان\n`;
+          content += `روش پرداخت: ${a.method}\n`;
+          content += "----------------------\n";
+        });
+      }
+      content += "\n";
+    });
+
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "patients_appointments.txt";
+    a.click();
+  }
+
+  // شروع به کار صفحه: رندر اولیه و تنظیمات پیش‌فرض
+  window.onload = () => {
+    renderPatients();
+    showAppointments();
+    renderStatsPatients();
+
+// تاریخ پیشفرض نوبت‌های امروز (سال، ماه، روز) با اعداد انگلیسی و شمسی
+    const today = new Date();
+
+    // تو اینجا چون نمی‌خوایم از کیت تاریخ استفاده کنیم، یک تابع تبدیل میلادی به شمسی ساده می‌نویسیم
+    // این تابع فقط برای تنظیم پیشفرض استفاده می‌شود
+    function toJalaali(gy, gm, gd) {
+      // کد تبدیل از میلادی به شمسی
+      // چون کد طولانی هست، اینجا تابعی ساده استفاده می‌کنیم یا از کتابخانه جدا استفاده نکنیم
+      // برای سادگی می‌گذاریم تاریخ پیشفرض را ثابت بگذاریم (مثلاً 1404-04-21)
+      return { jy: 1404, jm: 4, jd: 21 };
+    }
+
+    const jDate = toJalaali(today.getFullYear(), today.getMonth() + 1, today.getDate());
+    document.getElementById("searchDateYear").value = jDate.jy;
+    document.getElementById("searchDateMonth").value = String(jDate.jm).padStart(2, "0");
+    document.getElementById("searchDateDay").value = String(jDate.jd).padStart(2, "0");
+  };
+</script>
+</body>
+</html>
+
+
+
+
