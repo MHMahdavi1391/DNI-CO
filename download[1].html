@@ -1,0 +1,75 @@
+<!-- download.html -->
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>دانلود فایل‌ها</title>
+  <style>
+    body { background: #fffde7; font-family: Tahoma; text-align: center; margin: 0; }
+    h1 { color: #f9a825; margin: 20px 0; }
+    .file {
+      margin: 20px auto;
+      width: 80%;
+      background: #fff59d;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      transition: 0.3s;
+    }
+    .file:hover {
+      background: #fff176;
+      transform: scale(1.02);
+    }
+    input, button {
+      padding: 8px;
+      font-size: 16px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    a {
+      display: block;
+      margin-top: 10px;
+      color: #33691e;
+      font-weight: bold;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>📁 فایل‌های قابل دانلود</h1>
+  <div id="files"></div>
+
+  <script>
+    const MASTER_PASSWORD = "MhM13910310";
+
+    fetch('files.json')
+      .then(res => res.json())
+      .then(files => {
+        const container = document.getElementById('files');
+        files.forEach((file, index) => {
+          const div = document.createElement('div');
+          div.className = 'file';
+          div.innerHTML = `
+            <h3>${file.name}</h3>
+            <input type="password" placeholder="رمز را وارد کنید" id="pass${index}" />
+            <br>
+            <a id="link${index}" href="${file.filename}" style="display:none" download>⬇️ دانلود فایل</a>
+            <button onclick="checkPass(${index}, '${file.password}', '${file.filename}')">بررسی رمز</button>
+          `;
+          container.appendChild(div);
+        });
+      });
+
+    function checkPass(index, filePass, filename) {
+      const input = document.getElementById(`pass${index}`).value.trim();
+      const link = document.getElementById(`link${index}`);
+      if (input === filePass || input === MASTER_PASSWORD) {
+        link.style.display = 'inline';
+      } else {
+        alert("❌ رمز اشتباه است!");
+      }
+    }
+  </script>
+</body>
+</html>
