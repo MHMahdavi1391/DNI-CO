@@ -209,18 +209,22 @@
               div.className = "file";
 
               let content = `<h3>${file.name}</h3>
-                           <p>💰 قیمت: ${file.price} تومان</p>`;
+                             <p>💰 قیمت: ${file.price} تومان</p>`;
 
               if (isImage(file.filename)) {
-                content += `<img src="${file.filename}" class="preview-img" id="img${index}"><br>`;
+                content += `<img src="${file.filename}" class="preview-img ${file.free ? 'clear' : ''}" id="img${index}"><br>`;
               }
 
-              content += `
-              <input type="password" placeholder="رمز را وارد کنید" id="pass${index}" />
-              <br />
-              <a class="download-link" id="link${index}" href="${file.filename}" style="display:none" download>⬇️ دانلود فایل</a>
-              <button onclick="checkPass(${index}, '${file.password}')">بررسی رمز</button>
-            `;
+              if (file.free) {
+                content += `<a class="download-link" href="${file.filename}" download>⬇️ دانلود رایگان</a>`;
+              } else {
+                content += `
+                  <input type="password" placeholder="رمز را وارد کنید" id="pass${index}" />
+                  <br />
+                  <a class="download-link" id="link${index}" href="${file.filename}" style="display:none" download>⬇️ دانلود فایل</a>
+                  <button onclick="checkPass(${index}, '${file.password}')">بررسی رمز</button>
+                `;
+              }
 
               div.innerHTML = content;
               container.appendChild(div);
