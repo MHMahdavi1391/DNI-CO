@@ -1,20 +1,23 @@
 [
   {
-    "name": "0 پوستر بازی مرکب فصل 3 رایگان . رمز :",
+    "name": "پوستر بازی مرکب فصل 3 رایگان .:",
     "filename": "sgposter.jpg",
     "price": "0",
-    "password":"0"
+    "password":"0",
+    "free":"true"
   },
   {
     "name": "اهنگ Accomplised بازی مرکب فصل سه . تنها نسخه",
     "filename": "Accomplished.mp3",
     "price": "5000",
-    "password":"513435"
+    "password":"513435",
+    "free":"false"
   },
   {
     "name": "Realistic Biomes 1.2 Add-On رمز :0",
     "filename": "Realistic Biomes 1.2 Add-On.zip",
     "price": "0",
-    "password":"0"
+    "password":"0",
+    "free":"true"
   }
 ]
