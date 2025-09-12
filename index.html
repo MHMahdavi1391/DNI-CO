@@ -7,15 +7,15 @@
   <style>
     * { box-sizing: border-box; transition: all 0.3s ease; }
 
-    body {
-      font-family: 'Vazir', Tahoma, sans-serif;
+    html, body {
+      height: 100%;
       margin: 0;
       padding: 0;
+      font-family: 'Vazir', Tahoma, sans-serif;
       background-color: #fffbea;
       direction: rtl;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
     }
 
     header {
@@ -23,6 +23,7 @@
       padding: 25px 15px;
       text-align: center;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      flex-shrink: 0;
     }
 
     header h1 {
@@ -38,11 +39,17 @@
       color: #444;
     }
 
+    main {
+      flex: 1; /* فضای اصلی برای کارت‌ها */
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+
     .product-list {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
-      padding: 20px;
       justify-items: center;
     }
 
@@ -58,7 +65,7 @@
       align-items: center;
       max-width: 250px;
       width: 100%;
-      height: 320px; /* کارت مستطیلی */
+      height: 320px;
       transition: transform 0.3s, box-shadow 0.3s;
       overflow: hidden;
     }
@@ -120,9 +127,11 @@
       background-color: #222;
       color: white;
       text-align: center;
-      padding: 15px;
-      font-size: 13px;
+      padding: 20px;
+      font-size: 14px;
       line-height: 1.6;
+      margin-top: auto; /* همیشه پایین صفحه */
+      flex-shrink: 0;
     }
 
     #back-to-top {
@@ -151,12 +160,12 @@
     /* ریسپانسیو موبایل */
     @media (max-width: 480px) {
       .product-list {
-        grid-template-columns: 1fr; /* یک ستون بزرگ */
+        grid-template-columns: 1fr; /* هر ردیف فقط یک کارت */
         padding: 10px;
       }
 
       .product {
-        max-width: 90%;
+        max-width: 100%;
         height: auto;
       }
 
@@ -166,17 +175,22 @@
       }
 
       .product h3 {
-        font-size: 18px;
+        font-size: 20px;
         min-height: auto;
       }
 
       .product p {
-        font-size: 17px;
+        font-size: 18px;
       }
 
       .product button {
+        font-size: 18px;
+        padding: 12px 20px;
+      }
+
+      footer {
         font-size: 16px;
-        padding: 10px 18px;
+        padding: 25px 15px;
       }
     }
   </style>
@@ -187,7 +201,9 @@
     <h2>شرکت دیتک نمای ایران</h2>
   </header>
 
-  <div id="product-list" class="product-list"></div>
+  <main>
+    <div id="product-list" class="product-list"></div>
+  </main>
 
   <footer>
     © کلیه حقوق متعلق به دیتک نمای ایران است |  
