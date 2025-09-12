@@ -77,7 +77,7 @@
 </head>
 <body>
   <header>
-    <h1>DNI CO </h1>
+    <h1>DNI CO</h1>
     <h2>شرکت دیتک نمای ایران</h2>
   </header>
 
@@ -90,7 +90,6 @@
   </footer>
 
   <script>
-    // خوندن اطلاعات محصولات از فایل JSON
     fetch("products.json")
       .then(response => response.json())
       .then(data => {
@@ -104,11 +103,15 @@
             <p>${product.price} تومان</p>
           `;
           div.onclick = () => {
-            // باز شدن صفحه جزئیات محصول
-            window.location.href = \`product.html?id=\${product.id}\`;
+            window.location.href = `product.html?id=${product.id}`;
           };
           list.appendChild(div);
         });
+      })
+      .catch(err => {
+        document.getElementById("product-list").innerHTML =
+          "<p style='color:red;'>خطا در بارگذاری لیست محصولات</p>";
+        console.error(err);
       });
   </script>
 </body>
