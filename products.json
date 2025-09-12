@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "ماکت گوشی Samsung S24",
+    "price": "450,000",
+    "image": "images/s24.png",
+    "description": "ماکت گوشی سامسونگ S24 با کیفیت عالی و وزن سبک"
+  },
+  {
+    "id": 2,
+    "name": "ماکت گوشی iPhone 15 Pro",
+    "price": "520,000",
+    "image": "images/iphone15.png",
+    "description": "ماکت گوشی آیفون 15 پرو مناسب ویترین و نمایشگاه"
+  },
+  {
+    "id": 3,
+    "name": "ماکت گوشی Xiaomi Poco X3",
+    "price": "390,000",
+    "image": "images/poco_x3.png",
+    "description": "ماکت گوشی پوکو X3 شبیه به نسخه اصلی"
+  }
+]
