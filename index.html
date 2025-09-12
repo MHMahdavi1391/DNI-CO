@@ -2,13 +2,10 @@
 <html lang="fa">
 <head>
   <meta charset="UTF-8">
-  <title>DNI CO | دیتک نمای ایران : فروش ماکت گوشی همراه</title>
+  <title>DNI CO | فروش ماکت گوشی</title>
   <link href="https://fonts.googleapis.com/css2?family=Vazir&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      transition: all 0.3s ease;
-    }
+    * { box-sizing: border-box; transition: all 0.3s ease; }
 
     body {
       font-family: 'Vazir', Tahoma, sans-serif;
@@ -42,11 +39,10 @@
     }
 
     .product-list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 20px;
+      padding: 20px;
       flex: 1;
     }
 
@@ -54,7 +50,6 @@
       background: linear-gradient(145deg, #ffffff, #fef7d5);
       border-radius: 15px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      width: 180px;
       padding: 15px;
       text-align: center;
       cursor: pointer;
@@ -63,16 +58,13 @@
       align-items: center;
       opacity: 0;
       transform: translateY(30px);
+      transition: transform 0.3s, box-shadow 0.3s;
     }
 
-    /* انیمیشن ورود */
-    .product.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .product.show { opacity: 1; transform: translateY(0); }
 
     .product:hover {
-      transform: scale(1.1) rotate(1deg);
+      transform: scale(1.05) rotate(1deg);
       box-shadow: 0 10px 25px rgba(0,0,0,0.25);
     }
 
@@ -80,7 +72,14 @@
       width: 120px;
       height: 120px;
       object-fit: contain;
+      border-radius: 10px;
       margin-bottom: 10px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .product img:hover {
+      transform: scale(1.1) rotate(2deg);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.35);
     }
 
     .product h3 {
@@ -98,10 +97,7 @@
       transition: all 0.3s;
     }
 
-    .product p:hover {
-      color: #0c9b55;
-      transform: scale(1.1);
-    }
+    .product p:hover { color: #0c9b55; transform: scale(1.1); }
 
     .product button {
       background-color: #ffcc00;
@@ -127,7 +123,6 @@
       line-height: 1.6;
     }
 
-    /* دکمه بازگشت به بالا */
     #back-to-top {
       position: fixed;
       bottom: 30px;
@@ -150,22 +145,6 @@
       background-color: #ffd633;
       transform: scale(1.1);
     }
-
-    /* ریسپانسیو */
-    @media (max-width: 768px) {
-      .product {
-        width: 45%;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .product {
-        width: 90%;
-      }
-      header h1 {
-        font-size: 24px;
-      }
-    }
   </style>
 </head>
 <body>
@@ -182,11 +161,9 @@
     مدیر: 09362335266
   </footer>
 
-  <!-- دکمه بازگشت به بالا -->
   <button id="back-to-top">&#8679;</button>
 
   <script>
-    // بارگذاری محصولات با انیمیشن
     fetch("products.json")
       .then(response => response.json())
       .then(data => {
@@ -204,14 +181,9 @@
             e.stopPropagation();
             window.location.href = `product.html?id=${product.id}`;
           };
-          div.onclick = () => {
-            window.location.href = `product.html?id=${product.id}`;
-          };
+          div.onclick = () => { window.location.href = `product.html?id=${product.id}`; };
           list.appendChild(div);
-
-          setTimeout(() => {
-            div.classList.add('show');
-          }, 100 * index);
+          setTimeout(() => div.classList.add('show'), 100*index);
         });
       })
       .catch(err => {
@@ -220,14 +192,9 @@
         console.error(err);
       });
 
-    // دکمه بازگشت به بالا
     const backToTop = document.getElementById('back-to-top');
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 300) {
-        backToTop.style.display = 'flex';
-      } else {
-        backToTop.style.display = 'none';
-      }
+      backToTop.style.display = window.scrollY > 300 ? 'flex' : 'none';
     });
     backToTop.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
