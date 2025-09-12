@@ -2,6 +2,7 @@
 <html lang="fa">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DNI CO | فروش ماکت گوشی</title>
   <link href="https://fonts.googleapis.com/css2?family=Vazir&display=swap" rel="stylesheet">
   <style>
@@ -35,7 +36,7 @@
 
     header h2 {
       margin: 5px 0 0;
-      font-size: 16px;
+      font-size: 18px;
       color: #444;
     }
 
@@ -128,7 +129,7 @@
       color: white;
       text-align: center;
       padding: 20px;
-      font-size: 14px;
+      font-size: 16px;
       line-height: 1.6;
       margin-top: auto; /* همیشه پایین صفحه */
       flex-shrink: 0;
@@ -161,36 +162,46 @@
     @media (max-width: 480px) {
       .product-list {
         grid-template-columns: 1fr !important; /* فقط یک کارت در هر ردیف */
+        gap: 20px;
         padding: 10px;
       }
 
       .product {
-        max-width: 100%;
-        height: auto;
+        max-width: 100% !important;
+        width: 100% !important;
+        height: auto !important;
       }
 
       .product img {
-        width: 90%;
-        height: auto;
+        width: 90% !important;
+        height: auto !important;
       }
 
       .product h3 {
-        font-size: 20px;
+        font-size: 22px !important;
         min-height: auto;
       }
 
       .product p {
-        font-size: 18px;
+        font-size: 18px !important;
       }
 
       .product button {
-        font-size: 18px;
-        padding: 12px 20px;
+        font-size: 18px !important;
+        padding: 12px 20px !important;
+      }
+
+      header h1 {
+        font-size: 28px !important;
+      }
+
+      header h2 {
+        font-size: 18px !important;
       }
 
       footer {
-        font-size: 16px;
-        padding: 25px 15px;
+        font-size: 16px !important;
+        padding: 25px 15px !important;
       }
     }
   </style>
