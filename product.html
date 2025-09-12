@@ -24,45 +24,29 @@
       font-size: 22px;
       color: #222;
     }
-    header h2 {
-      margin: 5px 0 0;
-      font-size: 16px;
-      color: #444;
-    }
-    .product-container {
+    .product-detail {
       flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 30px;
-    }
-    .product-box {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      max-width: 400px;
-      text-align: center;
       padding: 20px;
+      text-align: center;
     }
-    .product-box img {
+    .product-detail img {
       width: 200px;
       height: 200px;
       object-fit: contain;
     }
-    .product-box h2 {
+    .product-detail h2 {
       margin: 15px 0 10px;
-      font-size: 20px;
       color: #333;
     }
-    .product-box p {
-      font-size: 15px;
+    .product-detail p {
+      margin: 5px 0;
+      font-size: 14px;
       color: #555;
     }
-    .price {
+    .product-detail .price {
       color: green;
       font-weight: bold;
-      font-size: 18px;
-      margin: 10px 0;
+      font-size: 16px;
     }
     footer {
       background-color: #222;
@@ -75,15 +59,10 @@
 </head>
 <body>
   <header>
-    <h1>DNI CO </h1>
-    <h2>شرکت دیتک نمای ایران</h2>
+    <h1>DNI CO</h1>
   </header>
 
-  <div class="product-container">
-    <div class="product-box" id="product-box">
-      <!-- اطلاعات محصول اینجا لود میشه -->
-    </div>
-  </div>
+  <div id="product-detail" class="product-detail"></div>
 
   <footer>
     © کلیه حقوق متعلق به دیتک نمای ایران است |  
@@ -92,25 +71,29 @@
   </footer>
 
   <script>
-    // گرفتن ID از URL
     const params = new URLSearchParams(window.location.search);
     const productId = params.get("id");
 
     fetch("products.json")
-      .then(res => res.json())
+      .then(response => response.json())
       .then(data => {
         const product = data.find(p => p.id == productId);
         if (product) {
-          const box = document.getElementById("product-box");
-          box.innerHTML = `
+          document.getElementById("product-detail").innerHTML = `
             <img src="${product.image}" alt="${product.name}">
             <h2>${product.name}</h2>
             <p class="price">${product.price} تومان</p>
-            <p>${product.description}</p>
+            <p>${product.details}</p>
           `;
         } else {
-          document.getElementById("product-box").innerHTML = "<p>محصول یافت نشد!</p>";
+          document.getElementById("product-detail").innerHTML =
+            "<p>محصول یافت نشد</p>";
         }
+      })
+      .catch(err => {
+        document.getElementById("product-detail").innerHTML =
+          "<p style='color:red;'>خطا در بارگذاری محصول</p>";
+        console.error(err);
       });
   </script>
 </body>
