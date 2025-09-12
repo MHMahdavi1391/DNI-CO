@@ -40,7 +40,7 @@
     }
 
     main {
-      flex: 1; /* فضای اصلی برای کارت‌ها */
+      flex: 1;
       display: flex;
       flex-direction: column;
       padding: 20px;
@@ -160,7 +160,7 @@
     /* ریسپانسیو موبایل */
     @media (max-width: 480px) {
       .product-list {
-        grid-template-columns: 1fr; /* هر ردیف فقط یک کارت */
+        grid-template-columns: 1fr !important; /* فقط یک کارت در هر ردیف */
         padding: 10px;
       }
 
@@ -170,7 +170,7 @@
       }
 
       .product img {
-        width: 80%;
+        width: 90%;
         height: auto;
       }
 
