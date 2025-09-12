@@ -58,7 +58,6 @@
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    /* افکت جذاب روی عکس محصول */
     .product-detail img:hover {
       transform: scale(1.1) rotate(2deg);
       box-shadow: 0 12px 25px rgba(0,0,0,0.35);
@@ -88,6 +87,22 @@
       transform: scale(1.1);
     }
 
+    .order-btn {
+      background-color: #ffcc00;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 15px;
+      transition: all 0.3s;
+    }
+
+    .order-btn:hover {
+      background-color: #ffd633;
+      transform: scale(1.05);
+    }
+
     footer {
       background-color: #222;
       color: white;
@@ -97,7 +112,6 @@
       line-height: 1.6;
     }
 
-    /* دکمه بازگشت به بالا */
     #back-to-top {
       position: fixed;
       bottom: 30px;
@@ -121,7 +135,6 @@
       transform: scale(1.1);
     }
 
-    /* ریسپانسیو */
     @media (max-width: 480px) {
       .product-detail img {
         width: 90%;
@@ -135,6 +148,10 @@
       }
       .product-detail .price {
         font-size: 16px;
+      }
+      .order-btn {
+        width: 80%;
+        font-size: 15px;
       }
     }
   </style>
@@ -152,7 +169,6 @@
     مدیر: 09362335266
   </footer>
 
-  <!-- دکمه بازگشت به بالا -->
   <button id="back-to-top">&#8679;</button>
 
   <script>
@@ -170,11 +186,45 @@
             <h2>${product.name}</h2>
             <p class="price">${product.price} تومان</p>
             <p>${product.details}</p>
+            <button class="order-btn">سفارش محصول</button>
           `;
-          // انیمیشن ورود
-          setTimeout(() => {
-            detailDiv.classList.add('show');
-          }, 100);
+          setTimeout(() => detailDiv.classList.add('show'), 100);
+
+          // دکمه سفارش
+          const orderBtn = detailDiv.querySelector('.order-btn');
+          orderBtn.addEventListener('click', () => {
+            const name = prompt("نام خود را وارد کنید:");
+            if(!name) return;
+            const family = prompt("نام خانوادگی خود را وارد کنید:");
+            if(!family) return;
+            const phone = prompt("شماره تلفن خود را وارد کنید:");
+            if(!phone) return;
+            const address = prompt("آدرس خود را وارد کنید:");
+            if(!address) return;
+            const notes = prompt("توضیحات (در صورت نیاز):");
+
+            const message = `
+سفارش محصول:
+نام و نام خانوادگی: ${name} ${family}
+شماره تلفن: ${phone}
+آدرس: ${address}
+توضیحات: ${notes || '-'}
+محصول: ${product.name}
+قیمت: ${product.price} تومان
+            `.trim();
+
+            const action = confirm("میخواید پیامک باز شود و به شماره 09362335266 ارسال شود؟\nOK = باز کردن پیامک\nCancel = کپی به کلیپبورد");
+            if(action) {
+              // باز کردن برنامه پیامک
+              const encodedMessage = encodeURIComponent(message);
+              window.location.href = `sms:09362335266?body=${encodedMessage}`;
+            } else {
+              // کپی به کلیپبورد
+              navigator.clipboard.writeText(message).then(() => {
+                alert("متن سفارش کپی شد. لطفاً خودش پیامک کنید به شماره 09362335266");
+              });
+            }
+          });
         } else {
           detailDiv.innerHTML = "<p>محصول یافت نشد</p>";
         }
@@ -184,14 +234,9 @@
         console.error(err);
       });
 
-    // دکمه بازگشت به بالا
     const backToTop = document.getElementById('back-to-top');
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 300) {
-        backToTop.style.display = 'flex';
-      } else {
-        backToTop.style.display = 'none';
-      }
+      backToTop.style.display = window.scrollY > 300 ? 'flex' : 'none';
     });
     backToTop.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
