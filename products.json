@@ -10,14 +10,14 @@
     "id": 2,
     "name": "ماکت سامسونگ s24 ultera",
     "price": "300,000",
-    "image": "images/samsung-s24.png",
+    "image": "images/s24.jpg",
     "details": "ماکت سامسونگ S24 با کیفیت بالا، مناسب دکور و کلکسیون. دست ساز"
   },
   {
     "id": 3,
     "name": "ماکت Google Pixel 10 ",
     "price": "280,000",
-    "image": "images/poco-x3.png",
+    "image": "images/pixel0.jpg",
     "details": "رنگ ابی با جزعیات و ظرافت زیاد دست ساز"
   }
 ]
