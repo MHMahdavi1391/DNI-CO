@@ -186,7 +186,7 @@
 
             if(name && phone && address){
               const message = `سفارش محصول:\nنام: ${name}\nشماره: ${phone}\nآدرس: ${address}\nتوضیحات: ${note || ''}\n\nمحصول: ${product.name}\nقیمت: ${product.price} تومان`;
-              if(confirm("میخواید متن سفارش کپی بشه یا برنامه پیامک باز بشه؟")){
+              if(confirm("OK=پیامک cancele=کپی و ارسال دستی میخواید متن سفارش کپی بشه یا برنامه پیامک باز بشه؟")){
                 // باز کردن برنامه پیامک
                 window.location.href = `sms:09362335266?body=${encodeURIComponent(message)}`;
               } else {
