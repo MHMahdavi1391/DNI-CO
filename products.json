@@ -1,23 +1,9 @@
 [
   {
     "id": 1,
-    "name": "ماکت آیفون 16",
+    "name": "test",
     "price": "250,000",
     "image": "images/iphone16.jpg",
-    "details": " ماکت دقیق آیفون 15 با کیفیت بالا و طراحی مشابه نسخه اصلی رنگ سبز روشن.دست ساز"
-  },
-  {
-    "id": 2,
-    "name": "ماکت سامسونگ s24 ultera",
-    "price": "300,000",
-    "image": "images/s24.jpg",
-    "details": "ماکت سامسونگ S24 با کیفیت بالا، مناسب دکور و کلکسیون. دست ساز"
-  },
-  {
-    "id": 3,
-    "name": "ماکت Google Pixel 10 ",
-    "price": "280,000",
-    "image": "images/pixel10.jpg",
-    "details": "رنگ ابی با جزعیات و ظرافت زیاد دست ساز"
+    "details": "about"
   }
 ]
