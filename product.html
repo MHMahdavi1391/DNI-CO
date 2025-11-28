@@ -18,9 +18,7 @@
 
   <!-- جزئیات محصول -->
   <main>
-    <div id="product-detail" class="product-detail">
-      <!-- اطلاعات محصول توسط JS اضافه می‌شوند -->
-    </div>
+    <div id="product-detail" class="product-detail"></div>
   </main>
 
   <!-- فوتر -->
@@ -46,14 +44,18 @@
 
         if(product){
           container.innerHTML = `
-            <img src="${product.image}" alt="${product.name}">
-            <h2>${product.name}</h2>
-            <p class="price">${product.price} تومان</p>
-            <p>${product.details}</p>
-            <button class="order-btn">سفارش محصول</button>
+            <div class="product-card">
+              <img src="${product.image}" alt="${product.name}">
+              <h2>${product.name}</h2>
+              <div class="product-info">
+                <p class="price">${product.price} تومان</p>
+                <p class="details">${product.details}</p>
+                <button class="order-btn">سفارش محصول</button>
+              </div>
+            </div>
           `;
 
-          // انیمیشن ورود محصول
+          // انیمیشن ورود
           setTimeout(() => container.style.opacity = 1, 100);
 
           // تعامل با سفارش محصول
@@ -97,4 +99,3 @@
   </script>
 </body>
 </html>
-
