@@ -3,195 +3,84 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DNI CO - جزئیات محصول</title>
-
+  <title>جزئیات محصول - DNI CO</title>
   <link href="https://fonts.googleapis.com/css2?family=Vazir&display=swap" rel="stylesheet">
-
-  <style>
-    * {
-      box-sizing: border-box;
-      transition: 0.3s ease;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Vazir', sans-serif;
-      background: #fffef7;
-      direction: rtl;
-    }
-
-    /* هدر */
-    header {
-      background: #ffcc00;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
-    }
-    header h1 {
-      margin: 0;
-      font-size: 26px;
-      color: #222;
-      letter-spacing: -0.5px;
-    }
-
-    /* بدنه */
-    main {
-      display: flex;
-      justify-content: center;
-      padding: 25px;
-    }
-
-    .card {
-      width: 100%;
-      max-width: 480px;
-      background: white;
-      border-radius: 18px;
-      padding: 20px;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.12);
-      text-align: center;
-      opacity: 0;
-      transform: translateY(20px);
-    }
-
-    .card.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .card img {
-      width: 85%;
-      border-radius: 15px;
-      object-fit: contain;
-      margin-bottom: 15px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
-    }
-
-    h2 {
-      margin: 10px 0;
-      font-size: 22px;
-      color: #333;
-    }
-
-    .price {
-      font-size: 19px;
-      font-weight: bold;
-      color: #00a23d;
-      margin: 5px 0 15px;
-    }
-
-    p {
-      color: #444;
-      margin: 10px 0;
-      line-height: 1.8;
-    }
-
-    /* دکمه سفارش */
-    .order-btn {
-      background: #ffcc00;
-      border: none;
-      padding: 14px 30px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 17px;
-      font-weight: bold;
-      margin-top: 15px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.18);
-    }
-
-    .order-btn:hover {
-      background: #ffe066;
-      transform: scale(1.05);
-    }
-
-    /* فوتر */
-    footer {
-      margin-top: 40px;
-      background: #222;
-      color: white;
-      text-align: center;
-      padding: 20px;
-      font-size: 15px;
-    }
-
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- هدر سایت -->
+  <header>
+    <div class="container header-container">
+      <h1 class="site-title">DNI CO</h1>
+      <h2 class="site-subtitle">شرکت دیتک نمای ایران</h2>
+    </div>
+  </header>
 
-<header>
-  <h1>DNI CO</h1>
-</header>
+  <!-- جزئیات محصول -->
+  <main>
+    <div id="product-detail" class="product-detail">
+      <!-- اطلاعات محصول توسط JS اضافه می‌شوند -->
+    </div>
+  </main>
 
-<main>
-  <div id="productCard" class="card"></div>
-</main>
+  <!-- فوتر -->
+  <footer>
+    <div class="footer-container">
+      © کلیه حقوق متعلق به DNI CO است | تاریخ ساخت: ۱۴۰۴ | مدیر: 09362335266
+    </div>
+  </footer>
 
-<footer>
-  © تمامی حقوق متعلق به DNI CO  
-  | تاریخ ساخت: ۱۴۰۴  
-  | مدیر: 09362335266
-</footer>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get("id");
 
-<script>
-  // گرفتن ID محصول
-  const params = new URLSearchParams(window.location.search);
-  const productId = params.get("id");
+    fetch("products.json")
+      .then(response => response.json())
+      .then(data => {
+        const product = data.find(p => p.id == productId);
+        if (product) {
+          const container = document.getElementById("product-detail");
+          container.innerHTML = `
+            <img src="${product.image}" alt="${product.name}">
+            <h2>${product.name}</h2>
+            <p class="price">${product.price} تومان</p>
+            <p>${product.details}</p>
+            <button class="order-btn">سفارش محصول</button>
+          `;
 
-  // لود دیتا
-  fetch("products.json")
-    .then(res => res.json())
-    .then(data => {
-      const product = data.find(p => p.id == productId);
+          // انیمیشن ورود
+          setTimeout(() => container.style.opacity = 1, 100);
 
-      if (!product) {
-        document.getElementById("productCard").innerHTML =
-          "<p>محصول یافت نشد</p>";
-        return;
-      }
+          // دکمه سفارش محصول
+          container.querySelector(".order-btn").onclick = () => {
+            const name = prompt("نام و نام خانوادگی:");
+            const phone = prompt("شماره تلفن:");
+            const address = prompt("آدرس خریدار:");
+            const note = prompt("توضیحات:");
 
-      document.getElementById("productCard").innerHTML = `
-        <img src="${product.image}" alt="${product.name}">
-        <h2>${product.name}</h2>
-        <p class="price">${product.price == 0 ? "رایگان" : product.price + " تومان"}</p>
-        <p>${product.details}</p>
-        <button class="order-btn">ثبت سفارش</button>
-      `;
-
-      // انیمیشن ورود کارت
-      setTimeout(() => {
-        document.getElementById("productCard").classList.add("show");
-      }, 100);
-
-      // دکمه سفارش
-      document.querySelector(".order-btn").onclick = () => {
-        const name = prompt("نام و نام خانوادگی:");
-        const phone = prompt("شماره تلفن:");
-        const address = prompt("آدرس خریدار:");
-        const note = prompt("توضیحات:");
-
-        if (!name || !phone || !address) {
-          alert("لطفاً تمام فیلدهای ضروری را پر کنید.");
-          return;
-        }
-
-        const message =
-          `سفارش محصول:\n` +
-          `نام: ${name}\n` +
-          `شماره: ${phone}\n` +
-          `آدرس: ${address}\n` +
-          `توضیحات: ${note || ''}\n\n` +
-          `محصول: ${product.name}\n` +
-          `قیمت: ${product.price} تومان`;
-
-        if (confirm("OK = پیامک\nCancel = کپی متن")) {
-          window.location.href = `sms:09362335266?body=${encodeURIComponent(message)}`;
+            if(name && phone && address){
+              const message = `سفارش محصول:\nنام: ${name}\nشماره: ${phone}\nآدرس: ${address}\nتوضیحات: ${note || ''}\n\nمحصول: ${product.name}\nقیمت: ${product.price} تومان`;
+              if(confirm("OK=باز کردن برنامه پیامک، Cancel=کپی متن سفارش")){
+                // باز کردن برنامه پیامک
+                window.location.href = `sms:09362335266?body=${encodeURIComponent(message)}`;
+              } else {
+                // کپی به کلیپبورد
+                navigator.clipboard.writeText(message).then(() => {
+                  alert("متن سفارش کپی شد! لطفاً به شماره 09362335266 پیامک بفرستید.");
+                });
+              }
+            } else {
+              alert("لطفاً تمام فیلدهای ضروری را پر کنید.");
+            }
+          };
         } else {
-          navigator.clipboard.writeText(message);
-          alert("متن سفارش کپی شد.");
+          document.getElementById("product-detail").innerHTML = "<p>محصول یافت نشد</p>";
         }
-      };
-    });
-</script>
-
+      })
+      .catch(err => {
+        document.getElementById("product-detail").innerHTML = "<p style='color:red;'>خطا در بارگذاری محصول</p>";
+        console.error(err);
+      });
+  </script>
 </body>
 </html>
