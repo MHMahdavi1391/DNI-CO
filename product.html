@@ -3,212 +3,195 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>جزئیات محصول - DNI CO</title>
-  <link href="https://fonts.googleapis.com/css2?family=Vazir&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; transition: all 0.3s ease; }
+  <title>DNI CO - جزئیات محصول</title>
 
-    html, body {
+  <link href="https://fonts.googleapis.com/css2?family=Vazir&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      transition: 0.3s ease;
+    }
+
+    body {
       margin: 0;
       padding: 0;
-      font-family: 'Vazir', Tahoma, sans-serif;
-      background-color: #fffbea;
+      font-family: 'Vazir', sans-serif;
+      background: #fffef7;
       direction: rtl;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
     }
 
+    /* هدر */
     header {
-      background-color: #ffcc00;
-      padding: 25px 15px;
+      background: #ffcc00;
+      padding: 20px;
       text-align: center;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
     }
-
     header h1 {
       margin: 0;
-      font-size: 28px;
+      font-size: 26px;
       color: #222;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+      letter-spacing: -0.5px;
     }
 
+    /* بدنه */
     main {
-      flex: 1;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
+      justify-content: center;
+      padding: 25px;
     }
 
-    .product-detail {
-      background: linear-gradient(145deg, #ffffff, #fef7d5);
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      padding: 20px;
-      max-width: 600px;
+    .card {
       width: 100%;
+      max-width: 480px;
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.12);
       text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
     }
 
-    .product-detail img {
-      width: 250px;
-      height: 250px;
+    .card.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card img {
+      width: 85%;
+      border-radius: 15px;
       object-fit: contain;
-      border-radius: 10px;
       margin-bottom: 15px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
     }
 
-    .product-detail h2 {
-      font-size: 24px;
-      margin: 15px 0 10px;
+    h2 {
+      margin: 10px 0;
+      font-size: 22px;
       color: #333;
     }
 
-    .product-detail p {
-      margin: 5px 0;
-      font-size: 16px;
-      color: #555;
-    }
-
-    .product-detail .price {
-      color: green;
+    .price {
+      font-size: 19px;
       font-weight: bold;
-      font-size: 18px;
+      color: #00a23d;
+      margin: 5px 0 15px;
     }
 
+    p {
+      color: #444;
+      margin: 10px 0;
+      line-height: 1.8;
+    }
+
+    /* دکمه سفارش */
     .order-btn {
-      margin-top: 15px;
-      background-color: #ffcc00;
+      background: #ffcc00;
       border: none;
-      border-radius: 8px;
-      padding: 12px 25px;
+      padding: 14px 30px;
+      border-radius: 12px;
       cursor: pointer;
-      font-size: 16px;
-      transition: all 0.3s;
+      font-size: 17px;
+      font-weight: bold;
+      margin-top: 15px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.18);
     }
 
     .order-btn:hover {
-      background-color: #ffd633;
+      background: #ffe066;
       transform: scale(1.05);
     }
 
+    /* فوتر */
     footer {
-      background-color: #222;
+      margin-top: 40px;
+      background: #222;
       color: white;
       text-align: center;
       padding: 20px;
-      font-size: 16px;
-      line-height: 1.6;
-      margin-top: auto;
-      flex-shrink: 0;
+      font-size: 15px;
     }
 
-    /* موبایل */
-    @media (max-width: 480px) {
-      .product-detail {
-        max-width: 100% !important;
-        width: 100% !important;
-        padding: 15px;
-      }
-
-      .product-detail img {
-        width: 90%;
-        height: auto;
-      }
-
-      .product-detail h2 {
-        font-size: 22px !important;
-      }
-
-      .product-detail p {
-        font-size: 18px !important;
-      }
-
-      .product-detail .price {
-        font-size: 20px !important;
-      }
-
-      .order-btn {
-        font-size: 18px !important;
-        padding: 12px 20px !important;
-      }
-
-      header h1 {
-        font-size: 28px !important;
-      }
-
-      footer {
-        font-size: 16px !important;
-        padding: 25px 15px !important;
-      }
-    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>DNI CO</h1>
-  </header>
 
-  <main>
-    <div id="product-detail" class="product-detail"></div>
-  </main>
+<header>
+  <h1>DNI CO</h1>
+</header>
 
-  <footer>
-    © کلیه حقوق متعلق به DNI CO است |  
-    تاریخ ساخت: ۱۴۰۴ |  
-    مدیر: 09362335266
-  </footer>
+<main>
+  <div id="productCard" class="card"></div>
+</main>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const productId = params.get("id");
+<footer>
+  © تمامی حقوق متعلق به DNI CO  
+  | تاریخ ساخت: ۱۴۰۴  
+  | مدیر: 09362335266
+</footer>
 
-    fetch("products.json")
-      .then(response => response.json())
-      .then(data => {
-        const product = data.find(p => p.id == productId);
-        if (product) {
-          document.getElementById("product-detail").innerHTML = `
-            <img src="${product.image}" alt="${product.name}">
-            <h2>${product.name}</h2>
-            <p class="price">${product.price} تومان</p>
-            <p>${product.details}</p>
-            <button class="order-btn">سفارش محصول</button>
-          `;
+<script>
+  // گرفتن ID محصول
+  const params = new URLSearchParams(window.location.search);
+  const productId = params.get("id");
 
-          document.querySelector(".order-btn").onclick = () => {
-            const name = prompt("نام و نام خانوادگی:");
-            const phone = prompt("شماره تلفن:");
-            const address = prompt("آدرس خریدار:");
-            const note = prompt("توضیحات:");
+  // لود دیتا
+  fetch("products.json")
+    .then(res => res.json())
+    .then(data => {
+      const product = data.find(p => p.id == productId);
 
-            if(name && phone && address){
-              const message = `سفارش محصول:\nنام: ${name}\nشماره: ${phone}\nآدرس: ${address}\nتوضیحات: ${note || ''}\n\nمحصول: ${product.name}\nقیمت: ${product.price} تومان`;
-              if(confirm("OK=پیامک cancele=کپی و ارسال دستی میخواید متن سفارش کپی بشه یا برنامه پیامک باز بشه؟")){
-                // باز کردن برنامه پیامک
-                window.location.href = `sms:09362335266?body=${encodeURIComponent(message)}`;
-              } else {
-                // کپی به کلیپبورد
-                navigator.clipboard.writeText(message).then(() => {
-                  alert("متن سفارش کپی شد! لطفاً به شماره 09362335266 پیامک بفرستید.");
-                });
-              }
-            } else {
-              alert("لطفاً تمام فیلدهای ضروری را پر کنید.");
-            }
-          };
+      if (!product) {
+        document.getElementById("productCard").innerHTML =
+          "<p>محصول یافت نشد</p>";
+        return;
+      }
 
-        } else {
-          document.getElementById("product-detail").innerHTML = "<p>محصول یافت نشد</p>";
+      document.getElementById("productCard").innerHTML = `
+        <img src="${product.image}" alt="${product.name}">
+        <h2>${product.name}</h2>
+        <p class="price">${product.price == 0 ? "رایگان" : product.price + " تومان"}</p>
+        <p>${product.details}</p>
+        <button class="order-btn">ثبت سفارش</button>
+      `;
+
+      // انیمیشن ورود کارت
+      setTimeout(() => {
+        document.getElementById("productCard").classList.add("show");
+      }, 100);
+
+      // دکمه سفارش
+      document.querySelector(".order-btn").onclick = () => {
+        const name = prompt("نام و نام خانوادگی:");
+        const phone = prompt("شماره تلفن:");
+        const address = prompt("آدرس خریدار:");
+        const note = prompt("توضیحات:");
+
+        if (!name || !phone || !address) {
+          alert("لطفاً تمام فیلدهای ضروری را پر کنید.");
+          return;
         }
-      })
-      .catch(err => {
-        document.getElementById("product-detail").innerHTML =
-          "<p style='color:red;'>خطا در بارگذاری محصول</p>";
-        console.error(err);
-      });
-  </script>
+
+        const message =
+          `سفارش محصول:\n` +
+          `نام: ${name}\n` +
+          `شماره: ${phone}\n` +
+          `آدرس: ${address}\n` +
+          `توضیحات: ${note || ''}\n\n` +
+          `محصول: ${product.name}\n` +
+          `قیمت: ${product.price} تومان`;
+
+        if (confirm("OK = پیامک\nCancel = کپی متن")) {
+          window.location.href = `sms:09362335266?body=${encodeURIComponent(message)}`;
+        } else {
+          navigator.clipboard.writeText(message);
+          alert("متن سفارش کپی شد.");
+        }
+      };
+    });
+</script>
+
 </body>
 </html>
