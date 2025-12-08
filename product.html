@@ -5,10 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>جزئیات محصول - DNI CO</title>
   <link href="https://fonts.googleapis.com/css2?family=Vazir&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css"> <!-- همان CSS ایندکس -->
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .order-form { margin-top: 20px; display: flex; flex-direction: column; max-width: 400px; gap: 10px; }
+    .order-form input, .order-form textarea { padding: 10px; font-size: 1rem; width: 100%; box-sizing: border-box; }
+    .order-form button { padding: 10px; font-size: 1rem; cursor: pointer; background: #ffcc00; border: none; }
+  </style>
 </head>
 <body>
-  <!-- هدر -->
   <header class="header">
     <div class="header-container">
       <h1 class="site-title">DNI CO</h1>
@@ -16,22 +20,18 @@
     </div>
   </header>
 
-  <!-- جزئیات محصول -->
   <main>
     <div id="product-detail" class="product-detail"></div>
   </main>
 
-  <!-- فوتر -->
   <footer class="footer">
     <div class="footer-container">
       © کلیه حقوق متعلق به DNI CO است | تاریخ ساخت: ۱۴۰۴ | مدیر: 09362335266
     </div>
   </footer>
 
-  <!-- دکمه بازگشت به بالا -->
   <button id="back-to-top">&#8679;</button>
 
-  <!-- اسکریپت جزئیات محصول -->
   <script>
     const params = new URLSearchParams(window.location.search);
     const productId = params.get("id");
@@ -50,35 +50,50 @@
               <div class="product-info">
                 <p class="price">${product.price} تومان</p>
                 <p class="details">${product.details}</p>
-                <button class="order-btn">سفارش محصول</button>
+                <form id="order-form" class="order-form">
+                  <input type="text" name="name" placeholder="نام و نام خانوادگی" required>
+                  <input type="text" name="phone" placeholder="شماره تلفن" required>
+                  <input type="text" name="address" placeholder="آدرس خریدار" required>
+                  <textarea name="note" placeholder="توضیحات" rows="3"></textarea>
+                  <button type="submit">ارسال سفارش</button>
+                </form>
               </div>
             </div>
           `;
 
-          // انیمیشن ورود
           setTimeout(() => container.style.opacity = 1, 100);
 
-          // تعامل با سفارش محصول
-          container.querySelector(".order-btn").onclick = () => {
-            const name = prompt("نام و نام خانوادگی:");
-            const phone = prompt("شماره تلفن:");
-            const address = prompt("آدرس خریدار:");
-            const note = prompt("توضیحات:");
+          const form = document.getElementById("order-form");
+          form.addEventListener("submit", function(e){
+            e.preventDefault();
 
-            if(name && phone && address){
-              const message = `سفارش محصول:\nنام: ${name}\nشماره: ${phone}\nآدرس: ${address}\nتوضیحات: ${note || ''}\n\nمحصول: ${product.name}\nقیمت: ${product.price} تومان`;
+            const formData = new FormData(form);
+            const name = formData.get("name");
+            const phone = formData.get("phone");
+            const address = formData.get("address");
+            const note = formData.get("note");
 
-              if(confirm("OK=باز کردن برنامه پیامک، Cancel=کپی متن سفارش")){
-                window.location.href = `sms:09362335266?body=${encodeURIComponent(message)}`;
+            const message = `سفارش محصول:\nنام: ${name}\nشماره: ${phone}\nآدرس: ${address}\nتوضیحات: ${note || ''}\n\nمحصول: ${product.name}\nقیمت: ${product.price} تومان`;
+
+            // ارسال پیام به ایتا
+            const token = 'bot425913:a7ad5fde-d6c1-4b94-a7fd-8731ba654790';
+            const chat_id = 10977332; // شناسه PV خودت یا مشتری
+            fetch(`https://eitaayar.ir/api/${token}/sendMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ chat_id: chat_id, text: message })
+            })
+            .then(res => res.json())
+            .then(res => {
+              if(res.ok){
+                alert("پیام سفارش با موفقیت ارسال شد!");
+                form.reset();
               } else {
-                navigator.clipboard.writeText(message).then(() => {
-                  alert("متن سفارش کپی شد! لطفاً به شماره 09362335266 پیامک بفرستید.");
-                });
+                alert("خطا در ارسال پیام: " + res.description);
               }
-            } else {
-              alert("لطفاً تمام فیلدهای ضروری را پر کنید.");
-            }
-          };
+            })
+            .catch(err => alert("خطای شبکه: " + err));
+          });
         } else {
           container.innerHTML = "<p>محصول یافت نشد</p>";
         }
@@ -88,7 +103,6 @@
         console.error(err);
       });
 
-    // دکمه بازگشت به بالا
     const backToTop = document.getElementById("back-to-top");
     window.addEventListener("scroll", () => {
       backToTop.style.display = window.scrollY > 300 ? "flex" : "none";
@@ -99,4 +113,3 @@
   </script>
 </body>
 </html>
-
