@@ -7,9 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Vazir&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
-  /* تم سفید-آبی سایت */
   body { font-family: 'Vazir', sans-serif; background: #ffffff; color: #0d3b66; margin: 0; padding: 0; }
-  
+
   .product-card { background: #f0f8ff; padding: 20px; border-radius: 10px; max-width: 900px; margin: 20px auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 20px; }
   .product-card img { width: 100%; border-radius: 10px; }
   .product-info { display: flex; flex-direction: column; gap: 10px; }
@@ -19,11 +18,18 @@
   .order-form button { padding: 10px; font-size: 1rem; background: #0077b6; color: #fff; border: none; border-radius: 5px; cursor: pointer; transition: 0.2s; }
   .order-form button:hover { background: #005f8a; }
 
-  /* media query برای صفحه‌های بزرگتر */
+  /* لپ‌تاپ و صفحه بزرگ: دو ستون */
   @media (min-width: 900px) {
     .product-card { flex-direction: row; align-items: flex-start; }
-    .product-card img { width: 50%; max-width: 400px; height: auto; object-fit: contain; }
-    .product-info { flex: 1; padding-right: 20px; }
+    .product-card img { width: 50%; max-width: 400px; height: auto; object-fit: contain; order: 2; }
+    .product-info { flex: 1; padding-right: 20px; order: 1; }
+  }
+
+  /* موبایل و تبلت: عکس بالای متن و فرم */
+  @media (max-width: 899px) {
+    .product-card { flex-direction: column; }
+    .product-card img { order: 0; }
+    .product-info { order: 1; }
   }
 </style>
 </head>
@@ -61,6 +67,7 @@ fetch("products.json")
     if(product){
       container.innerHTML = `
         <div class="product-card">
+          <img src="${product.image}" alt="${product.name}">
           <div class="product-info">
             <h2>${product.name}</h2>
             <p class="price">${product.price} تومان</p>
@@ -73,7 +80,6 @@ fetch("products.json")
               <button type="submit">ارسال سفارش</button>
             </form>
           </div>
-          <img src="${product.image}" alt="${product.name}">
         </div>
       `;
 
@@ -93,16 +99,13 @@ fetch("products.json")
 
         const message = `سفارش محصول:\nنام: ${name}\nشماره: ${phone}\nآدرس: ${address}\nتوضیحات: ${note || ''}\n\nمحصول: ${product.name}\nقیمت: ${product.price} تومان`;
 
-        // لینک API ایتا با متن سفارش
         const url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
 
-        // ارسال پیام در iframe مخفی
         const iframe = document.createElement('iframe');
         iframe.style.display = 'none';
         iframe.src = url;
         document.body.appendChild(iframe);
 
-        // تایید به کاربر و ریست فرم
         alert("سفارش شما با موفقیت ثبت شد!");
         form.reset();
       });
@@ -116,7 +119,6 @@ fetch("products.json")
     console.error(err);
   });
 
-// دکمه بازگشت به بالا
 const backToTop = document.getElementById("back-to-top");
 window.addEventListener("scroll", () => {
   backToTop.style.display = window.scrollY > 300 ? "flex" : "none";
