@@ -1,115 +1,115 @@
 <!DOCTYPE html>
 <html lang="fa">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>جزئیات محصول - DNI CO</title>
-  <link href="https://fonts.googleapis.com/css2?family=Vazir&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <style>
-    .order-form { margin-top: 20px; display: flex; flex-direction: column; max-width: 400px; gap: 10px; }
-    .order-form input, .order-form textarea { padding: 10px; font-size: 1rem; width: 100%; box-sizing: border-box; }
-    .order-form button { padding: 10px; font-size: 1rem; cursor: pointer; background: #ffcc00; border: none; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>جزئیات محصول - DNI CO</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazir&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* حفظ تم سفید-آبی */
+  body { font-family: 'Vazir', sans-serif; background: #ffffff; color: #0d3b66; margin: 0; padding: 0; }
+  .product-card { background: #f0f8ff; padding: 20px; border-radius: 10px; max-width: 500px; margin: 20px auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+  .product-card img { width: 100%; border-radius: 10px; }
+  .product-info { margin-top: 15px; }
+  .price { font-weight: bold; font-size: 1.2rem; color: #0077b6; }
+  .order-form { margin-top: 15px; display: flex; flex-direction: column; gap: 10px; }
+  .order-form input, .order-form textarea { padding: 10px; font-size: 1rem; border: 1px solid #0077b6; border-radius: 5px; }
+  .order-form button { padding: 10px; font-size: 1rem; background: #0077b6; color: #fff; border: none; border-radius: 5px; cursor: pointer; transition: 0.2s; }
+  .order-form button:hover { background: #005f8a; }
+</style>
 </head>
 <body>
-  <header class="header">
-    <div class="header-container">
-      <h1 class="site-title">DNI CO</h1>
-      <h2 class="site-subtitle">شرکت دیتک نمای ایران</h2>
-    </div>
-  </header>
 
-  <main>
-    <div id="product-detail" class="product-detail"></div>
-  </main>
+<header class="header">
+  <div class="header-container">
+    <h1 class="site-title">DNI CO</h1>
+    <h2 class="site-subtitle">شرکت دیتک نمای ایران</h2>
+  </div>
+</header>
 
-  <footer class="footer">
-    <div class="footer-container">
-      © کلیه حقوق متعلق به DNI CO است | تاریخ ساخت: ۱۴۰۴ | مدیر: 09362335266
-    </div>
-  </footer>
+<main>
+  <div id="product-detail" class="product-detail"></div>
+</main>
 
-  <button id="back-to-top">&#8679;</button>
+<footer class="footer">
+  <div class="footer-container">
+    © کلیه حقوق متعلق به DNI CO است | تاریخ ساخت: ۱۴۰۴ | مدیر: 09362335266
+  </div>
+</footer>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const productId = params.get("id");
+<button id="back-to-top">&#8679;</button>
 
-    fetch("products.json")
-      .then(response => response.json())
-      .then(data => {
-        const product = data.find(p => p.id == productId);
-        const container = document.getElementById("product-detail");
+<script>
+const params = new URLSearchParams(window.location.search);
+const productId = params.get("id");
 
-        if(product){
-          container.innerHTML = `
-            <div class="product-card">
-              <img src="${product.image}" alt="${product.name}">
-              <h2>${product.name}</h2>
-              <div class="product-info">
-                <p class="price">${product.price} تومان</p>
-                <p class="details">${product.details}</p>
-                <form id="order-form" class="order-form">
-                  <input type="text" name="name" placeholder="نام و نام خانوادگی" required>
-                  <input type="text" name="phone" placeholder="شماره تلفن" required>
-                  <input type="text" name="address" placeholder="آدرس خریدار" required>
-                  <textarea name="note" placeholder="توضیحات" rows="3"></textarea>
-                  <button type="submit">ارسال سفارش</button>
-                </form>
-              </div>
-            </div>
-          `;
+fetch("products.json")
+  .then(response => response.json())
+  .then(data => {
+    const product = data.find(p => p.id == productId);
+    const container = document.getElementById("product-detail");
 
-          setTimeout(() => container.style.opacity = 1, 100);
+    if(product){
+      container.innerHTML = `
+        <div class="product-card">
+          <img src="${product.image}" alt="${product.name}">
+          <h2>${product.name}</h2>
+          <div class="product-info">
+            <p class="price">${product.price} تومان</p>
+            <p class="details">${product.details}</p>
+            <form id="order-form" class="order-form">
+              <input type="text" name="name" placeholder="نام و نام خانوادگی" required>
+              <input type="text" name="phone" placeholder="شماره تلفن" required>
+              <input type="text" name="address" placeholder="آدرس خریدار" required>
+              <textarea name="note" placeholder="توضیحات" rows="3"></textarea>
+              <button type="submit">ارسال سفارش</button>
+            </form>
+          </div>
+        </div>
+      `;
 
-          const form = document.getElementById("order-form");
-          form.addEventListener("submit", function(e){
-            e.preventDefault();
+      setTimeout(() => container.style.opacity = 1, 100);
 
-            const formData = new FormData(form);
-            const name = formData.get("name");
-            const phone = formData.get("phone");
-            const address = formData.get("address");
-            const note = formData.get("note");
+      const token = 'bot425913:7d5eec5b-c6c8-4bd9-9500-95e1d5a3bde4';
+      const chat_id = 10977332;
 
-            const message = `سفارش محصول:\nنام: ${name}\nشماره: ${phone}\nآدرس: ${address}\nتوضیحات: ${note || ''}\n\nمحصول: ${product.name}\nقیمت: ${product.price} تومان`;
+      const form = document.getElementById('order-form');
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const formData = new FormData(form);
+        const name = formData.get('name');
+        const phone = formData.get('phone');
+        const address = formData.get('address');
+        const note = formData.get('note');
 
-            // ارسال پیام به ایتا
-            const token = 'bot425913:a7ad5fde-d6c1-4b94-a7fd-8731ba654790';
-            const chat_id = 10977332; // شناسه PV خودت یا مشتری
-            fetch(`https://eitaayar.ir/api/${token}/sendMessage`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ chat_id: chat_id, text: message })
-            })
-            .then(res => res.json())
-            .then(res => {
-              if(res.ok){
-                alert("پیام سفارش با موفقیت ارسال شد!");
-                form.reset();
-              } else {
-                alert("خطا در ارسال پیام: " + res.description);
-              }
-            })
-            .catch(err => alert("خطای شبکه: " + err));
-          });
-        } else {
-          container.innerHTML = "<p>محصول یافت نشد</p>";
-        }
-      })
-      .catch(err => {
-        document.getElementById("product-detail").innerHTML = "<p style='color:red;'>خطا در بارگذاری محصول</p>";
-        console.error(err);
+        const message = `سفارش محصول:\nنام: ${name}\nشماره: ${phone}\nآدرس: ${address}\nتوضیحات: ${note || ''}\n\nمحصول: ${product.name}\nقیمت: ${product.price} تومان`;
+
+        // لینک مستقیم API ایتا با متن سفارش
+        const url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
+
+        // باز کردن لینک در تب جدید
+        window.open(url, '_blank');
       });
 
-    const backToTop = document.getElementById("back-to-top");
-    window.addEventListener("scroll", () => {
-      backToTop.style.display = window.scrollY > 300 ? "flex" : "none";
-    });
-    backToTop.addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-  </script>
+    } else {
+      container.innerHTML = "<p>محصول یافت نشد</p>";
+    }
+  })
+  .catch(err => {
+    document.getElementById("product-detail").innerHTML = "<p style='color:red;'>خطا در بارگذاری محصول</p>";
+    console.error(err);
+  });
+
+// دکمه بازگشت به بالا
+const backToTop = document.getElementById("back-to-top");
+window.addEventListener("scroll", () => {
+  backToTop.style.display = window.scrollY > 300 ? "flex" : "none";
+});
+backToTop.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+</script>
+
 </body>
 </html>
