@@ -9,14 +9,22 @@
 <style>
   /* تم سفید-آبی سایت */
   body { font-family: 'Vazir', sans-serif; background: #ffffff; color: #0d3b66; margin: 0; padding: 0; }
-  .product-card { background: #f0f8ff; padding: 20px; border-radius: 10px; max-width: 500px; margin: 20px auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+  
+  .product-card { background: #f0f8ff; padding: 20px; border-radius: 10px; max-width: 900px; margin: 20px auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 20px; }
   .product-card img { width: 100%; border-radius: 10px; }
-  .product-info { margin-top: 15px; }
+  .product-info { display: flex; flex-direction: column; gap: 10px; }
   .price { font-weight: bold; font-size: 1.2rem; color: #0077b6; }
   .order-form { margin-top: 15px; display: flex; flex-direction: column; gap: 10px; }
   .order-form input, .order-form textarea { padding: 10px; font-size: 1rem; border: 1px solid #0077b6; border-radius: 5px; }
   .order-form button { padding: 10px; font-size: 1rem; background: #0077b6; color: #fff; border: none; border-radius: 5px; cursor: pointer; transition: 0.2s; }
   .order-form button:hover { background: #005f8a; }
+
+  /* media query برای صفحه‌های بزرگتر */
+  @media (min-width: 900px) {
+    .product-card { flex-direction: row; align-items: flex-start; }
+    .product-card img { width: 50%; max-width: 400px; height: auto; object-fit: contain; }
+    .product-info { flex: 1; padding-right: 20px; }
+  }
 </style>
 </head>
 <body>
@@ -53,9 +61,8 @@ fetch("products.json")
     if(product){
       container.innerHTML = `
         <div class="product-card">
-          <img src="${product.image}" alt="${product.name}">
-          <h2>${product.name}</h2>
           <div class="product-info">
+            <h2>${product.name}</h2>
             <p class="price">${product.price} تومان</p>
             <p class="details">${product.details}</p>
             <form id="order-form" class="order-form">
@@ -66,6 +73,7 @@ fetch("products.json")
               <button type="submit">ارسال سفارش</button>
             </form>
           </div>
+          <img src="${product.image}" alt="${product.name}">
         </div>
       `;
 
