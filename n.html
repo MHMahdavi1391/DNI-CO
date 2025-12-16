@@ -1,8 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DNI CO | فرم نظرسنجی</title>
   <style>
     body {
@@ -16,26 +16,28 @@
       color: white;
       padding: 20px;
       text-align: center;
-      font-size: 26px;
+      font-size: 5vw;
       font-weight: bold;
     }
     .container {
-      max-width: 500px;
+      max-width: 600px;
       background: white;
-      margin: 30px auto;
-      padding: 25px;
+      margin: 3vh auto;
+      padding: 3vh 3vw;
       border-radius: 12px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.08);
     }
     h2 {
       text-align: center;
       color: #0d6efd;
+      font-size: 4vw;
       margin-bottom: 20px;
     }
     label {
       display: block;
       margin-top: 15px;
       font-weight: 600;
+      font-size: 3vw;
     }
     input, textarea, select {
       width: 100%;
@@ -43,7 +45,7 @@
       margin-top: 6px;
       border-radius: 8px;
       border: 1px solid #ccc;
-      font-size: 14px;
+      font-size: 3vw;
     }
     textarea { resize: vertical; }
     .rating {
@@ -53,6 +55,7 @@
     }
     .rating label {
       font-weight: normal;
+      font-size: 3vw;
     }
     button {
       width: 100%;
@@ -62,10 +65,30 @@
       border: none;
       border-radius: 10px;
       color: white;
-      font-size: 16px;
+      font-size: 4vw;
       cursor: pointer;
     }
     button:hover { background: #0b5ed7; }
+    footer {
+      background: #111;
+      color: #fff;
+      text-align: center;
+      padding: 15px 10px;
+      font-size: 3vw;
+      margin-top: 20px;
+    }
+    .back-btn {
+      display: block;
+      width: fit-content;
+      margin: 20px auto 0;
+      padding: 10px 20px;
+      background: #0d6efd;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 3vw;
+    }
+    .back-btn:hover { background: #0b5ed7; }
   </style>
 </head>
 <body>
@@ -96,7 +119,13 @@
 
     <button type="submit">ارسال نظرسنجی</button>
   </form>
+
+  <a href="index.html" class="back-btn">بازگشت به صفحه اصلی</a>
 </div>
+
+<footer>
+حقوق متعلق به DNI CO | 1404 | شماره تماس مدیر: 09362335266
+</footer>
 
 <script>
 const token = 'bot425913:7d5eec5b-c6c8-4bd9-9500-95e1d5a3bde4';
@@ -128,3 +157,4 @@ form.addEventListener('submit', function(e) {
 
 </body>
 </html>
+
