@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>DNI CO | فرم نظرسنجی</title>
+  <style>
+    body {
+      font-family: Vazirmatn, Tahoma, sans-serif;
+      background: #f4f8fb;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #0d6efd;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 500px;
+      background: white;
+      margin: 30px auto;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+    h2 {
+      text-align: center;
+      color: #0d6efd;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    textarea { resize: vertical; }
+    .rating {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+    .rating label {
+      font-weight: normal;
+    }
+    button {
+      width: 100%;
+      margin-top: 25px;
+      padding: 12px;
+      background: #0d6efd;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover { background: #0b5ed7; }
+  </style>
+</head>
+<body>
+
+<header>DNI CO</header>
+
+<div class="container">
+  <h2>فرم نظرسنجی</h2>
+
+  <form id="survey-form">
+    <label>نام و نام خانوادگی</label>
+    <input type="text" name="name" required>
+
+    <label>شماره تلفن (اختیاری)</label>
+    <input type="tel" name="phone">
+
+    <label>نظر، نقاط قوت و ضعف</label>
+    <textarea name="feedback" rows="4" required></textarea>
+
+    <label>امتیاز شما</label>
+    <div class="rating">
+      <label><input type="radio" name="rate" value="1" required> 1</label>
+      <label><input type="radio" name="rate" value="2"> 2</label>
+      <label><input type="radio" name="rate" value="3"> 3</label>
+      <label><input type="radio" name="rate" value="4"> 4</label>
+      <label><input type="radio" name="rate" value="5"> 5</label>
+    </div>
+
+    <button type="submit">ارسال نظرسنجی</button>
+  </form>
+</div>
+
+<script>
+const token = 'bot425913:7d5eec5b-c6c8-4bd9-9500-95e1d5a3bde4';
+const chat_id = 10977332;
+
+const form = document.getElementById('survey-form');
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const data = new FormData(form);
+  const name = data.get('name');
+  const phone = data.get('phone') || 'ثبت نشده';
+  const feedback = data.get('feedback');
+  const rate = data.get('rate');
+
+  const message = `📊 فرم نظرسنجی DNI CO\n\nنام: ${name}\nشماره تماس: ${phone}\nامتیاز: ${rate} از 5\n\nنظر مشتری:\n${feedback}`;
+
+  const url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
+
+  const iframe = document.createElement('iframe');
+  iframe.style.display = 'none';
+  iframe.src = url;
+  document.body.appendChild(iframe);
+
+  alert('✅ نظرسنجی با موفقیت ارسال شد. از همکاری شما متشکریم');
+  form.reset();
+});
+</script>
+
+</body>
+</html>
