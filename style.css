@@ -546,28 +546,6 @@ body {
   }
 }
 
-/* افکت‌های زیبا برای hover */
-.glow-effect {
-  position: relative;
-  overflow: hidden;
-}
-
-.glow-effect::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.glow-effect:hover::after {
-  opacity: 1;
-}
-
 /* استایل برای لودینگ */
 .loading {
   display: flex;
