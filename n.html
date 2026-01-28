@@ -497,69 +497,70 @@ document.addEventListener('DOMContentLoaded', function() {
   form.addEventListener('submit', function(e) {
     e.preventDefault();
     
-    const formData = new FormData(this);
-    const name = formData.get('name');
-    const phone = formData.get('phone') || 'ثبت نشده';
-    const feedback = formData.get('feedback');
-    const rate = formData.get('rate');
-    
-    // ایجاد پیام
-    const message = `🌟 **نظرسنجی جدید DNI CO**\n\n`
-      + `👤 **نام:** ${name}\n`
-      + `📞 **تماس:** ${phone}\n`
-      + `⭐ **امتیاز:** ${rate} از 5\n`
-      + `📝 **نظر مشتری:**\n${feedback}\n\n`
-      + `⏰ **زمان:** ${new Date().toLocaleString('fa-IR')}`;
-    
-    // ارسال به تلگرام
-    const token = 'bot425913:7d5eec5b-c6c8-4bd9-9500-95e1d5a3bde4';
-    const chat_id = 10977332;
-    const url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
-    
     // نمایش لودینگ
     const submitBtn = form.querySelector('.submit-btn');
-    const originalText = submitBtn.innerHTML;
+    const originalHTML = submitBtn.innerHTML;
     submitBtn.innerHTML = `
-      <div class="loading-spinner" style="width: 20px; height: 20px; border: 2px solid white; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+      <div style="display: inline-block; width: 20px; height: 20px; border: 2px solid white; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
       در حال ارسال...
     `;
     submitBtn.disabled = true;
     
-    // ارسال
-    fetch(url)
-      .then(() => {
+    setTimeout(() => {
+      const formData = new FormData(form);
+      const name = formData.get('name');
+      const phone = formData.get('phone') || 'ثبت نشده';
+      const feedback = formData.get('feedback');
+      const rate = formData.get('rate');
+      
+      // ایجاد پیام
+      const message = `🌟 نظرسنجی DNI CO\n\n`
+        + `👤 نام: ${name}\n`
+        + `📞 تماس: ${phone}\n`
+        + `⭐ امتیاز: ${rate} از 5\n`
+        + `📝 نظر: ${feedback}\n\n`
+        + `⏰ زمان: ${new Date().toLocaleString('fa-IR')}`;
+      
+      // ارسال به تلگرام با iframe
+      const token = 'bot425913:7d5eec5b-c6c8-4bd9-9500-95e1d5a3bde4';
+      const chat_id = 10977332;
+      const url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
+      
+      console.log('ارسال نظرسنجی به:', url);
+      
+      // روش iframe
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.src = url;
+      document.body.appendChild(iframe);
+      
+      // بعد از ارسال
+      setTimeout(() => {
+        document.body.removeChild(iframe);
+        
         // پیام موفقیت
         alert('✅ نظرسنجی شما با موفقیت ثبت شد!\n\nاز مشارکت شما صمیمانه سپاسگزاریم.');
         
         // ریست فرم
         form.reset();
-        ratingText.textContent = 'لطفاً امتیاز دهید';
-        ratingText.style.color = '#666';
-        ratingText.style.fontWeight = 'normal';
-      })
-      .catch(() => {
-        alert('⚠️ خطا در ارسال نظرسنجی!\n\nلطفاً دوباره تلاش کنید.');
-      })
-      .finally(() => {
-        // بازگشت دکمه به حالت اول
-        submitBtn.innerHTML = originalText;
+        if (ratingText) {
+          ratingText.textContent = 'لطفاً امتیاز دهید';
+          ratingText.style.color = '#666';
+          ratingText.style.fontWeight = 'normal';
+        }
+        
+        // بازگشت دکمه
+        submitBtn.innerHTML = originalHTML;
         submitBtn.disabled = false;
-      });
+        
+      }, 1500);
+      
+    }, 500);
   });
   
   // استایل برای اسپینر
   const style = document.createElement('style');
   style.textContent = `
-    .loading-spinner {
-      width: 20px;
-      height: 20px;
-      border: 2px solid white;
-      border-top-color: transparent;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      display: inline-block;
-    }
-    
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
