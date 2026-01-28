@@ -1,132 +1,566 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>جزئیات محصول - DNI CO</title>
-<link href="https://fonts.googleapis.com/css2?family=Vazir&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<style>
-  body { font-family: 'Vazir', sans-serif; background: #ffffff; color: #0d3b66; margin: 0; padding: 0; }
-
-  .product-card { background: #f0f8ff; padding: 20px; border-radius: 10px; max-width: 900px; margin: 20px auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 20px; }
-  .product-card img { width: 100%; border-radius: 10px; }
-  .product-info { display: flex; flex-direction: column; gap: 10px; }
-  .price { font-weight: bold; font-size: 1.2rem; color: #0077b6; }
-  .order-form { margin-top: 15px; display: flex; flex-direction: column; gap: 10px; }
-  .order-form input, .order-form textarea { padding: 10px; font-size: 1rem; border: 1px solid #0077b6; border-radius: 5px; }
-  .order-form button { padding: 10px; font-size: 1rem; background: #0077b6; color: #fff; border: none; border-radius: 5px; cursor: pointer; transition: 0.2s; }
-  .order-form button:hover { background: #005f8a; }
-
-  /* لپ‌تاپ و صفحه بزرگ: دو ستون */
-  @media (min-width: 900px) {
-    .product-card { flex-direction: row; align-items: flex-start; }
-    .product-card img { width: 50%; max-width: 400px; height: auto; object-fit: contain; order: 2; }
-    .product-info { flex: 1; padding-right: 20px; order: 1; }
-  }
-
-  /* موبایل و تبلت: عکس بالای متن و فرم */
-  @media (max-width: 899px) {
-    .product-card { flex-direction: column; }
-    .product-card img { order: 0; }
-    .product-info { order: 1; }
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>جزئیات محصول - DNI CO</title>
+  
+  <!-- فونت -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+  
+  <!-- استایل اصلی -->
+  <link rel="stylesheet" href="style.css">
+  
+  <style>
+    /* استایل خاص صفحه محصول */
+    .product-detail-page {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 25px;
+      background: white;
+      color: #007aff;
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+    
+    .back-button:hover {
+      transform: translateX(5px);
+      background: #007aff;
+      color: white;
+    }
+    
+    .product-container {
+      background: white;
+      border-radius: 25px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .product-header {
+      background: linear-gradient(135deg, #007aff 0%, #00c6ff 100%);
+      color: white;
+      padding: 30px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .product-title {
+      font-size: 32px;
+      font-weight: 800;
+      margin: 0;
+    }
+    
+    .product-price-tag {
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+      padding: 12px 25px;
+      border-radius: 15px;
+      font-size: 24px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .product-price-tag.free {
+      background: rgba(255,149,0,0.2);
+    }
+    
+    .product-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      padding: 40px;
+    }
+    
+    .product-image-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .main-image {
+      width: 100%;
+      height: 350px;
+      background: linear-gradient(135deg, #f5f5f7, #e8e8ed);
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+    }
+    
+    .main-image img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+    
+    .main-image:hover img {
+      transform: scale(1.05);
+    }
+    
+    .image-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #ff9500, #ff5e3a);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .product-info-section {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+    
+    .product-description {
+      background: #f8f9fa;
+      padding: 25px;
+      border-radius: 20px;
+      border-right: 5px solid #007aff;
+    }
+    
+    .product-description h3 {
+      color: #1d1d1f;
+      margin-bottom: 15px;
+      font-size: 22px;
+    }
+    
+    .product-description p {
+      color: #555;
+      line-height: 1.8;
+      font-size: 16px;
+    }
+    
+    .product-features {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin: 20px 0;
+    }
+    
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 15px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      color: #555;
+    }
+    
+    .feature-item svg {
+      color: #007aff;
+      width: 20px;
+      height: 20px;
+    }
+    
+    /* بخش سفارش */
+    .order-section {
+      background: #f8f9fa;
+      border-radius: 20px;
+      padding: 30px;
+      margin-top: 20px;
+    }
+    
+    .order-section h3 {
+      color: #1d1d1f;
+      margin-bottom: 25px;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .order-form {
+      display: grid;
+      gap: 20px;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .form-group label {
+      color: #555;
+      font-weight: 600;
+      font-size: 15px;
+    }
+    
+    .form-control {
+      padding: 15px 20px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      background: white;
+    }
+    
+    .form-control:focus {
+      border-color: #007aff;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(0,122,255,0.1);
+    }
+    
+    .submit-btn {
+      background: linear-gradient(135deg, #34c759, #2aa44f);
+      color: white;
+      border: none;
+      padding: 18px;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 20px;
+      box-shadow: 0 6px 20px rgba(52,199,89,0.2);
+    }
+    
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(52,199,89,0.3);
+    }
+    
+    .submit-btn:active {
+      transform: translateY(-1px);
+    }
+    
+    .contact-options {
+      display: flex;
+      gap: 15px;
+      margin-top: 25px;
+      flex-wrap: wrap;
+    }
+    
+    .contact-btn {
+      flex: 1;
+      min-width: 150px;
+      padding: 15px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      text-align: center;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .contact-btn.whatsapp {
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      color: white;
+      box-shadow: 0 4px 15px rgba(37,211,102,0.2);
+    }
+    
+    .contact-btn.call {
+      background: linear-gradient(135deg, #007aff, #0056cc);
+      color: white;
+      box-shadow: 0 4px 15px rgba(0,122,255,0.2);
+    }
+    
+    .contact-btn:hover {
+      transform: translateY(-3px);
+    }
+    
+    /* موبایل */
+    @media (max-width: 768px) {
+      .product-header {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+        padding: 25px 20px;
+      }
+      
+      .product-content {
+        grid-template-columns: 1fr;
+        padding: 25px;
+        gap: 30px;
+      }
+      
+      .main-image {
+        height: 250px;
+      }
+      
+      .product-features {
+        grid-template-columns: 1fr;
+      }
+      
+      .order-section {
+        padding: 25px 20px;
+      }
+      
+      .contact-options {
+        flex-direction: column;
+      }
+      
+      .contact-btn {
+        width: 100%;
+      }
+    }
+    
+    /* موبایل کوچک */
+    @media (max-width: 480px) {
+      .product-title {
+        font-size: 26px;
+      }
+      
+      .product-price-tag {
+        font-size: 20px;
+      }
+      
+      .main-image {
+        height: 200px;
+        padding: 20px;
+      }
+      
+      .product-description {
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
-<body>
+<body class="product-detail-page">
 
-<header class="header">
-  <div class="header-container">
-    <h1 class="site-title">DNI CO</h1>
-    <h2 class="site-subtitle">شرکت دیتک نمای ایران</h2>
+<div class="container">
+  <!-- دکمه بازگشت -->
+  <a href="index.html" class="back-button">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M19 12H5M12 19l-7-7 7-7"/>
+    </svg>
+    بازگشت به محصولات
+  </a>
+  
+  <!-- محصول -->
+  <div id="product-detail" class="product-container">
+    <!-- محتوا با JS پر می‌شود -->
   </div>
-</header>
+</div>
 
-<main>
-  <div id="product-detail" class="product-detail"></div>
-</main>
-
-<footer class="footer">
-  <div class="footer-container">
-    © کلیه حقوق متعلق به DNI CO است | تاریخ ساخت: ۱۴۰۴ | مدیر: 09362335266
-    <a href="https://mhmahdavi1391.github.io/DNI-CO/n" target="_blank" style="color:#0d6efd;">شرکت در نظرسنجی و بهبود کیفیت</a>
-  </div>
-</footer>
-
-<button id="back-to-top">&#8679;</button>
-
+<!-- اسکریپت -->
 <script>
-const params = new URLSearchParams(window.location.search);
-const productId = params.get("id");
+document.addEventListener('DOMContentLoaded', async function() {
+  const productId = new URLSearchParams(window.location.search).get('id');
+  const productDetail = document.getElementById('product-detail');
+  
+  if (!productId) {
+    productDetail.innerHTML = `
+      <div style="text-align: center; padding: 60px; color: #ff3b30;">
+        <h3>محصولی یافت نشد!</h3>
+        <p>لطفاً از طریق صفحه اصلی محصولات را مشاهده کنید.</p>
+        <a href="index.html" class="btn-details" style="margin-top: 20px; display: inline-block;">
+          بازگشت به صفحه اصلی
+        </a>
+      </div>
+    `;
+    return;
+  }
+  
+  try {
+    // لودینگ
+    productDetail.innerHTML = `
+      <div style="display: flex; justify-content: center; align-items: center; min-height: 400px;">
+        <div class="loading-spinner"></div>
+      </div>
+    `;
+    
+    const response = await fetch('products.json');
+    const products = await response.json();
+    const product = products.find(p => p.id == productId);
+    
+    if (!product) throw new Error('محصول یافت نشد');
+    
+    // نمایش محصول
+    renderProduct(product);
+    
+  } catch (error) {
+    console.error('خطا:', error);
+    productDetail.innerHTML = `
+      <div style="text-align: center; padding: 60px; color: #ff3b30;">
+        <h3>خطا در بارگذاری محصول!</h3>
+        <p>${error.message}</p>
+        <a href="index.html" class="btn-details" style="margin-top: 20px; display: inline-block;">
+          بازگشت به صفحه اصلی
+        </a>
+      </div>
+    `;
+  }
+});
 
-fetch("products.json")
-  .then(response => response.json())
-  .then(data => {
-    const product = data.find(p => p.id == productId);
-    const container = document.getElementById("product-detail");
-
-    if(product){
-      container.innerHTML = `
-        <div class="product-card">
-          <img src="${product.image}" alt="${product.name}">
-          <div class="product-info">
-            <h2>${product.name}</h2>
-            <p class="price">${product.price} تومان</p>
-            <p class="details">${product.details}</p>
-            <form id="order-form" class="order-form">
-              <input type="text" name="name" placeholder="نام و نام خانوادگی" required>
-              <input type="text" name="phone" placeholder="شماره تلفن" required>
-              <input type="text" name="address" placeholder="آدرس خریدار" required>
-              <textarea name="note" placeholder="توضیحات" rows="3"></textarea>
-              <button type="submit">ارسال سفارش</button>
-            </form>
+function renderProduct(product) {
+  const productDetail = document.getElementById('product-detail');
+  
+  const isFree = product.price === "0" || product.price === 0;
+  const priceText = isFree ? 'رایگان' : `${parseInt(product.price).toLocaleString('fa-IR')} تومان`;
+  const priceClass = isFree ? 'free' : '';
+  
+  const features = product.details.split('.').filter(f => f.trim()).slice(0, 4);
+  
+  const productHTML = `
+    <!-- هدر محصول -->
+    <div class="product-header">
+      <h1 class="product-title">${product.name}</h1>
+      <div class="product-price-tag ${priceClass}">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 1v22M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 110 7H6"/>
+        </svg>
+        ${priceText}
+      </div>
+    </div>
+    
+    <!-- محتوای اصلی -->
+    <div class="product-content">
+      <!-- بخش تصویر -->
+      <div class="product-image-section">
+        <div class="main-image" style="position: relative;">
+          ${product.id === 1 ? '<span class="image-badge">پیشنهاد ویژه</span>' : ''}
+          <img src="${product.image}" alt="${product.name}" 
+               onerror="this.src='https://via.placeholder.com/500x350/007aff/ffffff?text=DNI+CO'">
+        </div>
+        
+        <div class="product-features">
+          ${features.map(feature => `
+            <div class="feature-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              ${feature.trim()}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      
+      <!-- بخش اطلاعات و سفارش -->
+      <div class="product-info-section">
+        <div class="product-description">
+          <h3>توضیحات کامل</h3>
+          <p>${product.details}</p>
+        </div>
+        
+        <div class="order-section">
+          <h3>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"></path>
+            </svg>
+            ثبت سفارش
+          </h3>
+          
+          <form id="order-form" class="order-form">
+            <div class="form-group">
+              <label for="name">نام و نام خانوادگی *</label>
+              <input type="text" id="name" name="name" class="form-control" required 
+                     placeholder="مثال: محمد حسین مهدوی">
+            </div>
+            
+            <div class="form-group">
+              <label for="phone">شماره تماس *</label>
+              <input type="tel" id="phone" name="phone" class="form-control" required 
+                     placeholder="مثال: ۰۹۳۶۲۳۳۵۲۶۶">
+            </div>
+            
+            <div class="form-group">
+              <label for="details">جزئیات سفارش</label>
+              <textarea id="details" name="details" class="form-control" rows="4"
+                        placeholder="مشخصات دقیق سفارش خود را اینجا بنویسید..."></textarea>
+            </div>
+            
+            <button type="submit" class="submit-btn">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"></path>
+              </svg>
+              ثبت نهایی سفارش
+            </button>
+          </form>
+          
+          <div class="contact-options">
+            <a href="https://wa.me/989362335266" class="contact-btn whatsapp" target="_blank">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.272-.099-.47-.149-.67.15-.198.298-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.521-.075-.149-.669-1.612-.916-2.206-.242-.579-.487-.501-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.76.982.998-3.675-.236-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.897 6.994c-.004 5.45-4.438 9.88-9.888 9.88m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.18-1.24-6.162-3.495-8.411"/>
+              </svg>
+              پیام در واتساپ
+            </a>
+            
+            <a href="tel:09362335266" class="contact-btn call">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+              </svg>
+              تماس تلفنی
+            </a>
           </div>
         </div>
-      `;
-
-      setTimeout(() => container.style.opacity = 1, 100);
-
+      </div>
+    </div>
+  `;
+  
+  productDetail.innerHTML = productHTML;
+  
+  // مدیریت فرم
+  const orderForm = document.getElementById('order-form');
+  if (orderForm) {
+    orderForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const name = formData.get('name');
+      const phone = formData.get('phone');
+      const details = formData.get('details') || 'بدون توضیح';
+      
+      // ایجاد پیام سفارش
+      const message = `📦 **سفارش جدید از سایت DNI CO**\n\n`
+        + `🛒 **محصول:** ${product.name}\n`
+        + `💰 **قیمت:** ${priceText}\n\n`
+        + `👤 **مشتری:** ${name}\n`
+        + `📞 **تماس:** ${phone}\n`
+        + `📝 **جزئیات:** ${details}\n\n`
+        + `⏰ **زمان:** ${new Date().toLocaleString('fa-IR')}`;
+      
+      // ارسال به تلگرام (API شما)
       const token = 'bot425913:7d5eec5b-c6c8-4bd9-9500-95e1d5a3bde4';
       const chat_id = 10977332;
-
-      const form = document.getElementById('order-form');
-      form.addEventListener('submit', function(e){
-        e.preventDefault();
-        const formData = new FormData(form);
-        const name = formData.get('name');
-        const phone = formData.get('phone');
-        const address = formData.get('address');
-        const note = formData.get('note');
-
-        const message = `سفارش محصول:\nنام: ${name}\nشماره: ${phone}\nآدرس: ${address}\nتوضیحات: ${note || ''}\n\nمحصول: ${product.name}\nقیمت: ${product.price} تومان`;
-
-        const url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
-
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.src = url;
-        document.body.appendChild(iframe);
-
-        alert("سفارش شما با موفقیت ثبت شد!");
-        form.reset();
-      });
-
-    } else {
-      container.innerHTML = "<p>محصول یافت نشد</p>";
-    }
-  })
-  .catch(err => {
-    document.getElementById("product-detail").innerHTML = "<p style='color:red;'>خطا در بارگذاری محصول</p>";
-    console.error(err);
-  });
-
-const backToTop = document.getElementById("back-to-top");
-window.addEventListener("scroll", () => {
-  backToTop.style.display = window.scrollY > 300 ? "flex" : "none";
-});
-backToTop.addEventListener("click", () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-});
+      const url = `https://eitaayar.ir/api/${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
+      
+      // ارسال
+      fetch(url)
+        .then(() => {
+          alert('✅ سفارش شما با موفقیت ثبت شد!\n\nبه زودی با شما تماس می‌گیریم.');
+          orderForm.reset();
+        })
+        .catch(() => {
+          alert('⚠️ خطا در ارسال سفارش!\n\nلطفاً مستقیماً با شماره 09362335266 تماس بگیرید.');
+        });
+    });
+  }
+}
 </script>
 
 </body>
