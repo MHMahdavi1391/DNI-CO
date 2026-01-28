@@ -1,40 +1,152 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DNI CO - شرکت دیتک نمای ایران</title>
-  <link href="https://fonts.googleapis.com/css2?family=Vazir&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css"> <!-- فایل CSS جدا -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="description" content="شرکت دیتک نمای ایران (DNI CO) - ارائه خدمات پاورپوینت، ورد، اکسل، ادیت و طراحی سایت با بهترین کیفیت">
+  <meta name="keywords" content="پاورپوینت, ورد, اکسل, ادیت, طراحی سایت, DNI CO, شرکت دیتک نمای ایران">
+  <meta name="author" content="محمد حسین مهدوی">
+  <title>DNI CO - خدمات طراحی و تولید محتوا</title>
+  
+  <!-- Open Graph برای اشتراک‌گذاری اجتماعی -->
+  <meta property="og:title" content="DNI CO - شرکت دیتک نمای ایران">
+  <meta property="og:description" content="ساخت پاورپوینت، ورد، اکسل، ادیت و طراحی سایت">
+  <meta property="og:type" content="website">
+  
+  <!-- فونت -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003/font.css">
+  
+  <!-- آیکون -->
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+  
+  <!-- استایل اصلی -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- استایل اضافی -->
+  <style>
+    /* بهبود accessibility */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    
+    /* انیمیشن‌های جدید */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    /* بهبود نمایش در موبایل */
+    .mobile-only { display: none; }
+    
+    @media (max-width: 768px) {
+      .desktop-only { display: none; }
+      .mobile-only { display: block; }
+    }
+  </style>
 </head>
 <body>
-  <!-- هدر سایت -->
-  <header class="header">
+  <!-- هدر -->
+  <header class="header" role="banner">
     <div class="header-container">
-      <h1 class="site-title">DNI CO</h1>
-      <h2 class="site-subtitle">شرکت دیتک نمای ایران</h2>
+      <h1 class="site-title" tabindex="0">DNI CO</h1>
+      <p class="site-subtitle">شرکت دیتک نمای ایران</p>
+      <p class="site-tagline">تخصص در تولید محتوا و خدمات دیجیتال</p>
     </div>
   </header>
 
-  <!-- بخش محصولات -->
-  <main>
-    <div id="product-list" class="product-list">
-      <!-- کارت محصولات با JS اضافه می‌شوند -->
-    </div>
+  <!-- ناوبری سریع (برای موبایل) -->
+  <nav class="quick-nav mobile-only" aria-label="منوی سریع">
+    <a href="#product-list" class="nav-link">محصولات</a>
+    <a href="n.html" class="nav-link">نظرسنجی</a>
+    <a href="tel:09362335266" class="nav-link">تماس</a>
+  </nav>
+
+  <!-- محتوای اصلی -->
+  <main id="main-content" role="main">
+    <!-- بنر معرفی -->
+    <section class="intro-banner" aria-labelledby="intro-heading">
+      <h2 id="intro-heading" class="sr-only">معرفی شرکت</h2>
+      <p>با سال‌ها تجربه در تولید محتوا و خدمات اداری دیجیتال</p>
+    </section>
+    
+    <!-- لیست محصولات -->
+    <section class="product-section" aria-labelledby="products-heading">
+      <h2 id="products-heading" class="section-title">خدمات و محصولات ما</h2>
+      <div id="product-list" class="product-list">
+        <!-- محصولات با JavaScript لود می‌شوند -->
+        <div class="loading-state" aria-live="polite">
+          <div class="spinner" aria-hidden="true"></div>
+          <span class="loading-text">در حال بارگذاری محصولات...</span>
+        </div>
+      </div>
+    </section>
   </main>
+
   <!-- فوتر -->
-  <footer class="footer">
+  <footer class="footer" role="contentinfo">
     <div class="footer-container">
-      © کلیه حقوق متعلق به DNI CO است | تاریخ ساخت: ۱۴۰۴ | مدیر: 09362335266
-  <a href="https://mhmahdavi1391.github.io/DNI-CO/n" target="_blank" style="color:#0d6efd;">شرکت در نظرسنجی و بهبود کیفیت</a>
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h3>درباره ما</h3>
+          <p>شرکت دیتک نمای ایران با سابقه درخشان در تولید محتوا و خدمات دیجیتال</p>
+        </div>
+        
+        <div class="footer-section">
+          <h3>تماس با ما</h3>
+          <p>
+            <a href="tel:09362335266" class="contact-link">📞 ۰۹۳۶۲۳۳۵۲۶۶</a>
+          </p>
+          <p>مدیریت: محمد حسین مهدوی</p>
+        </div>
+        
+        <div class="footer-section">
+          <h3>لینک‌های مفید</h3>
+          <ul class="footer-links">
+            <li><a href="n.html" target="_blank">💡 نظرسنجی و بهبود کیفیت</a></li>
+            <li><a href="#main-content">🏠 بازگشت به بالا</a></li>
+            <li><a href="javascript:void(0);" onclick="showStats()">📊 آمار بازدید</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="copyright">
+        <p>© تمامی حقوق برای <strong>DNI CO</strong> محفوظ است | ۱۴۰۴</p>
+      </div>
     </div>
   </footer>
 
-  <!-- دکمه بازگشت به بالا -->
-  <button id="back-to-top">&#8679;</button>
+  <!-- دکمه‌های ثابت -->
+  <button id="back-to-top" class="floating-btn" aria-label="بازگشت به بالای صفحه" title="بازگشت به بالا">
+    ↑
+  </button>
+  
+  <a href="https://wa.me/989362335266" class="floating-btn whatsapp-btn" target="_blank" 
+     aria-label="ارسال پیام در واتساپ" title="چت در واتساپ">
+    💬
+  </a>
 
-  <!-- اسکریپت JS جدا -->
-  <script src="main.js"></script>
+  <!-- اسکریپت‌ها -->
+  <script src="main.js" defer></script>
+  <script src="stats.js" defer></script>
 </body>
 </html>
-
