@@ -2,151 +2,275 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <meta name="description" content="شرکت دیتک نمای ایران (DNI CO) - ارائه خدمات پاورپوینت، ورد، اکسل، ادیت و طراحی سایت با بهترین کیفیت">
-  <meta name="keywords" content="پاورپوینت, ورد, اکسل, ادیت, طراحی سایت, DNI CO, شرکت دیتک نمای ایران">
-  <meta name="author" content="محمد حسین مهدوی">
-  <title>DNI CO - خدمات طراحی و تولید محتوا</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DNI CO - خدمات دیجیتال</title>
   
-  <!-- Open Graph برای اشتراک‌گذاری اجتماعی -->
-  <meta property="og:title" content="DNI CO - شرکت دیتک نمای ایران">
-  <meta property="og:description" content="ساخت پاورپوینت، ورد، اکسل، ادیت و طراحی سایت">
-  <meta property="og:type" content="website">
+  <!-- فونت Vazirmatn -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
   
-  <!-- فونت -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003/font.css">
-  
-  <!-- آیکون -->
-  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
-  
-  <!-- استایل اصلی -->
+  <!-- استایل -->
   <link rel="stylesheet" href="style.css">
   
-  <!-- استایل اضافی -->
   <style>
-    /* بهبود accessibility */
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
+    /* استایل اضافی برای بهبود UI */
+    .hero {
+      background: linear-gradient(135deg, #007aff, #34c759);
+      color: white;
+      text-align: center;
+      padding: 40px 20px;
+      border-radius: 20px;
+      margin: 20px;
+      box-shadow: 0 10px 30px rgba(0,122,255,0.3);
+    }
+    
+    .hero h2 {
+      font-size: 28px;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+    
+    .hero p {
+      font-size: 18px;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    /* بهبود دکمه‌ها */
+    .btn {
+      display: inline-block;
+      padding: 12px 30px;
+      background: linear-gradient(135deg, #007aff, #0056cc);
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,122,255,0.3);
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,122,255,0.4);
+    }
+    
+    .btn-secondary {
+      background: linear-gradient(135deg, #34c759, #2aa44f);
+      box-shadow: 0 4px 15px rgba(52,199,89,0.3);
+    }
+    
+    /* بهبود کارت محصولات */
+    .product-card {
+      background: white;
+      border-radius: 20px;
       overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
     }
     
-    /* انیمیشن‌های جدید */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .product-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
     }
     
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
+    .product-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #f5f5f7;
     }
     
-    /* بهبود نمایش در موبایل */
-    .mobile-only { display: none; }
+    .product-content {
+      padding: 20px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
     
+    .product-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #1d1d1f;
+    }
+    
+    .product-price {
+      font-size: 18px;
+      font-weight: bold;
+      color: #34c759;
+      margin-bottom: 15px;
+    }
+    
+    .product-description {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+    
+    /* اسکرول بار زیبا */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #007aff, #34c759);
+      border-radius: 10px;
+    }
+    
+    /* موبایل */
     @media (max-width: 768px) {
-      .desktop-only { display: none; }
-      .mobile-only { display: block; }
+      .hero {
+        padding: 30px 15px;
+        margin: 10px;
+        border-radius: 15px;
+      }
+      
+      .hero h2 {
+        font-size: 24px;
+      }
+      
+      .hero p {
+        font-size: 16px;
+      }
+      
+      .btn {
+        padding: 10px 25px;
+        font-size: 14px;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- هدر -->
-  <header class="header" role="banner">
-    <div class="header-container">
-      <h1 class="site-title" tabindex="0">DNI CO</h1>
-      <p class="site-subtitle">شرکت دیتک نمای ایران</p>
-      <p class="site-tagline">تخصص در تولید محتوا و خدمات دیجیتال</p>
+
+<!-- هدر ساده و زیبا -->
+<header class="header">
+  <div class="container">
+    <div class="header-content">
+      <div class="logo">
+        <h1>DNI CO</h1>
+        <p>شرکت دیتک نمای ایران</p>
+      </div>
+      <nav class="main-nav">
+        <a href="#products" class="nav-link">محصولات</a>
+        <a href="n.html" class="nav-link">نظرسنجی</a>
+        <a href="tel:09362335266" class="nav-link btn-call">📞 تماس</a>
+      </nav>
     </div>
-  </header>
+  </div>
+</header>
 
-  <!-- ناوبری سریع (برای موبایل) -->
-  <nav class="quick-nav mobile-only" aria-label="منوی سریع">
-    <a href="#product-list" class="nav-link">محصولات</a>
-    <a href="n.html" class="nav-link">نظرسنجی</a>
-    <a href="tel:09362335266" class="nav-link">تماس</a>
-  </nav>
+<!-- بخش اصلی -->
+<main class="main">
+  <!-- بنر معرفی -->
+  <section class="hero">
+    <h2>خدمات حرفه‌ای دیجیتال</h2>
+    <p>طراحی، تولید محتوا، پاورپوینت، ورد، اکسل، ادیت ویدیو و طراحی سایت با بهترین کیفیت</p>
+    <a href="#products" class="btn mt-20">مشاهده خدمات ↓</a>
+  </section>
 
-  <!-- محتوای اصلی -->
-  <main id="main-content" role="main">
-    <!-- بنر معرفی -->
-    <section class="intro-banner" aria-labelledby="intro-heading">
-      <h2 id="intro-heading" class="sr-only">معرفی شرکت</h2>
-      <p>با سال‌ها تجربه در تولید محتوا و خدمات اداری دیجیتال</p>
-    </section>
-    
-    <!-- لیست محصولات -->
-    <section class="product-section" aria-labelledby="products-heading">
-      <h2 id="products-heading" class="section-title">خدمات و محصولات ما</h2>
-      <div id="product-list" class="product-list">
-        <!-- محصولات با JavaScript لود می‌شوند -->
-        <div class="loading-state" aria-live="polite">
-          <div class="spinner" aria-hidden="true"></div>
-          <span class="loading-text">در حال بارگذاری محصولات...</span>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- فوتر -->
-  <footer class="footer" role="contentinfo">
-    <div class="footer-container">
-      <div class="footer-grid">
-        <div class="footer-section">
-          <h3>درباره ما</h3>
-          <p>شرکت دیتک نمای ایران با سابقه درخشان در تولید محتوا و خدمات دیجیتال</p>
-        </div>
-        
-        <div class="footer-section">
-          <h3>تماس با ما</h3>
-          <p>
-            <a href="tel:09362335266" class="contact-link">📞 ۰۹۳۶۲۳۳۵۲۶۶</a>
-          </p>
-          <p>مدیریت: محمد حسین مهدوی</p>
-        </div>
-        
-        <div class="footer-section">
-          <h3>لینک‌های مفید</h3>
-          <ul class="footer-links">
-            <li><a href="n.html" target="_blank">💡 نظرسنجی و بهبود کیفیت</a></li>
-            <li><a href="#main-content">🏠 بازگشت به بالا</a></li>
-            <li><a href="javascript:void(0);" onclick="showStats()">📊 آمار بازدید</a></li>
-          </ul>
-        </div>
-      </div>
-      
-      <div class="copyright">
-        <p>© تمامی حقوق برای <strong>DNI CO</strong> محفوظ است | ۱۴۰۴</p>
+  <!-- بخش محصولات -->
+  <section id="products" class="products-section">
+    <div class="container">
+      <h2 class="section-title">خدمات ما</h2>
+      <div id="product-list" class="products-grid">
+        <!-- محصولات اینجا لود می‌شوند -->
       </div>
     </div>
-  </footer>
+  </section>
+</main>
 
-  <!-- دکمه‌های ثابت -->
-  <button id="back-to-top" class="floating-btn" aria-label="بازگشت به بالای صفحه" title="بازگشت به بالا">
-    ↑
-  </button>
+<!-- فوتر -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-info">
+        <h3>DNI CO</h3>
+        <p>تولید محتوا و خدمات دیجیتال</p>
+        <p class="contact-info">📞 مدیر: 09362335266</p>
+      </div>
+      <div class="footer-links">
+        <a href="index.html" class="footer-link">صفحه اصلی</a>
+        <a href="n.html" class="footer-link">نظرسنجی</a>
+      </div>
+    </div>
+    <div class="copyright">
+      <p>© کلیه حقوق برای DNI CO محفوظ است | ۱۴۰۴</p>
+    </div>
+  </div>
+</footer>
+
+<!-- فقط دکمه بازگشت به بالا -->
+<button id="back-to-top" class="back-top-btn">↑</button>
+
+<!-- اسکریپت -->
+<script src="main.js"></script>
+
+<script>
+// اسکریپت ساده برای دکمه بازگشت به بالا
+const backToTop = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 300) {
+    backToTop.style.display = 'flex';
+  } else {
+    backToTop.style.display = 'none';
+  }
+});
+
+backToTop.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// کلاس‌های کمکی
+const style = document.createElement('style');
+style.textContent = `
+  .mt-20 { margin-top: 20px; }
+  .back-top-btn {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #007aff, #0056cc);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: 0 4px 15px rgba(0,122,255,0.3);
+    z-index: 1000;
+    transition: all 0.3s ease;
+  }
   
-  <a href="https://wa.me/989362335266" class="floating-btn whatsapp-btn" target="_blank" 
-     aria-label="ارسال پیام در واتساپ" title="چت در واتساپ">
-    💬
-  </a>
+  .back-top-btn:hover {
+    transform: scale(1.1);
+  }
+  
+  @media (max-width: 768px) {
+    .back-top-btn {
+      bottom: 20px;
+      left: 20px;
+      width: 45px;
+      height: 45px;
+    }
+  }
+`;
+document.head.appendChild(style);
+</script>
 
-  <!-- اسکریپت‌ها -->
-  <script src="main.js" defer></script>
-  <script src="stats.js" defer></script>
 </body>
 </html>
